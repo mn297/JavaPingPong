@@ -10,24 +10,21 @@ import acm.program.GraphicsProgram;
 import java.awt.*;
 
 
-public class Bounce extends GraphicsProgram {
+public class Sim4 extends GraphicsProgram {
     //DEBUG purposes
     private static final boolean DEBUG = false;
     private static final boolean TEST = true;
 
     //screen
-    public static final int HEIGHT = 600; //600 default
-    public static final int WIDTH = 1280;// 1280 default
+    public static final int HEIGHT = 600; //1280 default
+    public static final int WIDTH = 600;// 600 default
     public static final int OFFSET = 200;
 
     //coordinates transformation
-    public static final double ppTableXlen = 2.74;
-    public static final double ppTableYlen = 1.52;
-
     public static final double Xmin = 0;
-    public static final double Xmax = ppTableXlen; //2.74 default
+    public static final double Xmax = 2.74; //2.74 default
     public static final double Ymin = 0.0;
-    public static final double Ymax = ppTableYlen; //1.52 default
+    public static final double Ymax = 2.74; //1.52 default
     public static final int xmin = 0;
     public static final int xmax = WIDTH;
     public static final int ymin = 0;
@@ -53,8 +50,8 @@ public class Bounce extends GraphicsProgram {
     //energy
     private static final double ETHR = 0.001;
 
-    public static final double Vdef = 3.0;
-    public static final double Tdef = 30.0;
+    public static final double Vdef = 6.0;
+    public static final double Tdef = 10.0;
 
     public static final int SLEEP = 10;
     public static final double TICK = SLEEP / 1000.0;
@@ -66,7 +63,7 @@ public class Bounce extends GraphicsProgram {
         boolean RUNNING = true;
 
         //window size
-        this.resize(WIDTH, HEIGHT + OFFSET);
+        this.resize(WIDTH + OFFSET, HEIGHT + OFFSET);
 
         //plane
         GRect gPlane = new GRect(0, HEIGHT, WIDTH, wallThickness);
@@ -154,7 +151,7 @@ public class Bounce extends GraphicsProgram {
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
                 Vox = (-1) * Math.sqrt(2 * KEx / bMass);
                 Voy = Math.sqrt(2 * KEy / bMass);
-                if(Vy < 0 ) Voy=-Voy; //maintain Vy direction
+                if(Vy < 0 ) Voy=-Voy;
 
                 //reset state
                 Xo = (XwallR - bSize); // default XwallR - bSize
@@ -171,7 +168,7 @@ public class Bounce extends GraphicsProgram {
                 KEy = 0.5 * bMass * Vx * Vx * (1 - loss);
                 Vox = Math.sqrt(2 * KEx / bMass);
                 Voy = Math.sqrt(2 * KEy / bMass);
-                if(Vy < 0 ) Voy=-Voy; //maintain Vy direction
+                if(Vy < 0 ) Voy=-Voy;
 
                 //reset state
                 Xo =XwallL; //default XwallL

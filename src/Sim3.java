@@ -2,32 +2,27 @@
     The code below contains lines from ECSE 202 assigment 1 handout by Professor Frank Ferrie.
  */
 
-import acm.graphics.GOval;
-import acm.graphics.GPoint;
-import acm.graphics.GRect;
+import acm.graphics.*;
 import acm.program.GraphicsProgram;
 
-import java.awt.*;
+import java.awt.Color;
 
 
-public class Bounce extends GraphicsProgram {
+public class Sim3 extends GraphicsProgram {
     //DEBUG purposes
     private static final boolean DEBUG = false;
     private static final boolean TEST = true;
 
     //screen
-    public static final int HEIGHT = 600; //600 default
-    public static final int WIDTH = 1280;// 1280 default
+    public static final int HEIGHT = 600; //1280 default
+    public static final int WIDTH = 600;// 600 default
     public static final int OFFSET = 200;
 
-    //coordinates transformation
-    public static final double ppTableXlen = 2.74;
-    public static final double ppTableYlen = 1.52;
-
+    //coordinates
     public static final double Xmin = 0;
-    public static final double Xmax = ppTableXlen; //2.74 default
+    public static final double Xmax = 2.74; //2.74 default
     public static final double Ymin = 0.0;
-    public static final double Ymax = ppTableYlen; //1.52 default
+    public static final double Ymax = 2.74; //1.52 default
     public static final int xmin = 0;
     public static final int xmax = WIDTH;
     public static final int ymin = 0;
@@ -53,20 +48,16 @@ public class Bounce extends GraphicsProgram {
     //energy
     private static final double ETHR = 0.001;
 
-    public static final double Vdef = 3.0;
+    public static final double Vdef = 5.0;
     public static final double Tdef = 30.0;
 
     public static final int SLEEP = 10;
     public static final double TICK = SLEEP / 1000.0;
 
-
     // entry point
     public void run() {
-
-        boolean RUNNING = true;
-
         //window size
-        this.resize(WIDTH, HEIGHT + OFFSET);
+        this.resize(WIDTH + OFFSET, HEIGHT + OFFSET);
 
         //plane
         GRect gPlane = new GRect(0, HEIGHT, WIDTH, wallThickness);
@@ -101,7 +92,7 @@ public class Bounce extends GraphicsProgram {
         //input parameters, ask user
         double Vo = Vdef;
         double theta = Tdef;
-        double loss = 0.1;
+        double loss = 0.01;
 
 
         double Xo = Xinit;
@@ -112,20 +103,25 @@ public class Bounce extends GraphicsProgram {
         double Vox = Vo * Math.cos(theta * Pi / 180);
         double Voy = Vo * Math.sin(theta * Pi / 180);
 
-        //console title
+        boolean running = true;
         System.out.println("\t\t\t Ball Position and Velocity\n");
 
-        //initialize energy as class variables
-        double PE = bMass * g * (Vox * Vt / g * (1 - Math.exp(-g * time / Vt)));
-        double KEx = 0.5 * bMass * Math.pow(Vox * Math.exp(-g * time / Vt), 2);
-        double KEy = 0.5 * bMass * Math.pow((Voy + Vt) * Math.exp(-g * time / Vt) - Vt, 2);
+        //initialize energy
 
-        while (RUNNING) {
+
+        while (running) {
+
+
             //speed and displacement
             double X = Vox * Vt / g * (1 - Math.exp(-g * time / Vt));
             double Y = Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time;
             double Vx = Vox * Math.exp(-g * time / Vt);
             double Vy = (Voy + Vt) * Math.exp(-g * time / Vt) - Vt;
+
+            //energy SCOPE inside while loop
+            double PE = bMass * g * Y;
+            double KEx= 0.5 * bMass * Vx * Vx;
+            double KEy= 0.5 * bMass * Vx * Vx;
 
             //ground collision handler
             if (Y + Yo <= bSize) {
@@ -139,25 +135,23 @@ public class Bounce extends GraphicsProgram {
                 }
                 Voy = Math.sqrt(2 * KEy / bMass);
 
-                //reset state
+                //reinitialize parameters
                 Xo += X;
                 Yo = bSize; //??why not Yo+=Y
                 X = 0; //??why need to be 0? its recalculated everytime
                 Y = 0;
                 time = 0;
             }
-
+            ;
             //right wall collision handler
             if ((X + Xo) >= (XwallR - 2 * bSize) && Vx > 0) { //default XwallR - bSize
-                PE = bMass * g * (Y+Yo);
+                PE = bMass * g * Y;
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
                 Vox = (-1) * Math.sqrt(2 * KEx / bMass);
                 Voy = Math.sqrt(2 * KEy / bMass);
-                if(Vy < 0 ) Voy=-Voy; //maintain Vy direction
 
-                //reset state
-                Xo = (XwallR - bSize); // default XwallR - bSize
+                Xo = (XwallR - bSize);
                 Yo += Y;
                 X = 0;
                 Y = 0;
@@ -166,15 +160,13 @@ public class Bounce extends GraphicsProgram {
 
             //left wall collision handler
             if ((X + Xo) <= (XwallL + bSize) && Vx < 0) { //default: XwallL+bSize
-                PE = bMass * g * (Y+Yo);
+                PE = bMass * g * Y;
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vx * Vx * (1 - loss);
                 Vox = Math.sqrt(2 * KEx / bMass);
                 Voy = Math.sqrt(2 * KEy / bMass);
-                if(Vy < 0 ) Voy=-Voy; //maintain Vy direction
 
-                //reset state
-                Xo =XwallL; //default XwallL
+                Xo = XwallL;
                 Yo += Y;
                 X = 0;
                 Y = 0;
@@ -189,9 +181,9 @@ public class Bounce extends GraphicsProgram {
                         Vx,
                         Vy);
             pause(SLEEP);
-
-
-            if ((KEx + KEy + PE) < ETHR) RUNNING = false;
+            try {
+                if ((KEx + KEy + PE) < ETHR) running = false;
+            } catch(NullPointerException e){};
 
             p = W2S(new GPoint(Xo + X - bSize, Yo + Y + bSize));
             ScrX = p.getX();
@@ -213,7 +205,7 @@ public class Bounce extends GraphicsProgram {
         double Y = P.getY();
 
         double x = (X - Xmin) * Xs;
-        double y = (double)ymax - ((Y - Ymin) * Ys);
+        double y = ymax - ((Y - Ymin) * Ys);
 
         return new GPoint(x, y);
 
