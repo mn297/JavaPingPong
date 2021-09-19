@@ -9,7 +9,7 @@ import acm.program.GraphicsProgram;
 
 import java.awt.*;
 
-
+//Credits to Professor Frank Ferrie, Assignment 1 handout
 public class Bounce extends GraphicsProgram {
     //DEBUG purposes
     private static final boolean DEBUG = false;
@@ -59,7 +59,7 @@ public class Bounce extends GraphicsProgram {
     public static final int SLEEP = 10;
     public static final double TICK = SLEEP / 1000.0;
 
-
+    //Credits to Professor Frank Ferrie, Assignment 1 handout
     // entry point
     public void run() {
 
