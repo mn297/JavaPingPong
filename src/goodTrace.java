@@ -10,7 +10,7 @@ import acm.program.GraphicsProgram;
 import java.awt.*;
 
 //Credits to Professor Frank Ferrie, Assignment 1 handout
-public class Bounce extends GraphicsProgram {
+public class goodTrace extends GraphicsProgram {
     //DEBUG purposes
     private static final boolean DEBUG = false;
     private static final boolean TEST = true;
@@ -157,7 +157,7 @@ public class Bounce extends GraphicsProgram {
                 if(Vy < 0 ) Voy=-Voy; //maintain Vy direction
 
                 //reset state
-                Xo = (XwallR - bSize); // default XwallR - bSize
+                Xo = (XwallR - 2*bSize); // default XwallR - bSize
                 Yo += Y;
                 X = 0;
                 Y = 0;
@@ -165,7 +165,7 @@ public class Bounce extends GraphicsProgram {
             }
 
             //left wall collision handler
-            if ((X + Xo) <= (XwallL+bSize) && Vx < 0) { //default: XwallL+bSize
+            if ((X + Xo) <= (XwallL) && Vx < 0) { //default: XwallL+bSize
                 PE = bMass * g * (Y+Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vx * Vx * (1 - loss);
@@ -174,7 +174,7 @@ public class Bounce extends GraphicsProgram {
                 if(Vy < 0 ) Voy=-Voy; //maintain Vy direction
 
                 //reset state
-                Xo = XwallL+bSize; //default XwallL+bSize
+                Xo =XwallL; //default XwallL
                 Yo += Y;
                 X = 0;
                 Y = 0;
@@ -193,7 +193,7 @@ public class Bounce extends GraphicsProgram {
 
             if ((KEx + KEy + PE) < ETHR) RUNNING = false;
 
-            p = W2S(new GPoint(Xo + X -bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
+            p = W2S(new GPoint(Xo + X , Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
             ScrX = p.getX();
             ScrY = p.getY();
             myBall.setLocation(p);
