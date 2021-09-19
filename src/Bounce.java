@@ -148,7 +148,7 @@ public class Bounce extends GraphicsProgram {
             }
 
             //right wall collision handler
-            if ((X + Xo) >= (XwallR - 2 * bSize) && Vx > 0) { //default XwallR - bSize
+            if ((X + Xo) >= (XwallR - bSize) && Vx > 0) { //default XwallR - bSize
                 PE = bMass * g * (Y+Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
