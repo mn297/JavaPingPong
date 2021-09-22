@@ -53,8 +53,8 @@ public class Bounce_no extends GraphicsProgram {
     //energy
     private static final double ETHR = 0.001;
 
-    public static final double Vdef = 3.0;
-    public static final double Tdef = 10.0;
+    public static final double Vdef = 4.0;
+    public static final double Tdef = 55.0;
 
     public static final int SLEEP = 10;
     public static final double TICK = SLEEP / 1000.0;
@@ -101,7 +101,7 @@ public class Bounce_no extends GraphicsProgram {
         //input parameters, ask user
         double Vo = Vdef;
         double theta = Tdef;
-        double loss = 0.12;
+        double loss = 0.1;
 
 
         double Xo = Xinit;
