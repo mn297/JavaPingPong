@@ -197,7 +197,7 @@ public class Bounce extends GraphicsProgram {
             ScrX = p.getX();
             ScrY = p.getY();
             myBall.setLocation(p);
-            trace(ScrX, ScrY);
+            if(time>0) trace(ScrX, ScrY); // fix first trace (optional)
 
 
 //            pause(100);

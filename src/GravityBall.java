@@ -11,7 +11,7 @@ import acm.graphics.*;
 import acm.program.*;
 
 public class GravityBall extends GraphicsProgram {
-
+    int myvar1 = 1;
     /* How many ms to pause between "heartbeats" */
     private static final int DELAY = 2;
     /* How much to reduce velocity after a collision */
@@ -40,7 +40,6 @@ public class GravityBall extends GraphicsProgram {
             // update vizualization
             ball.move(vx, vy);
             vy += DELTA_VY;
-
             // update parameters
             if(hitLeftWall(ball, vx) || hitRightWall(ball, vx)) {
                 vx = -(vx * DAMPING);
