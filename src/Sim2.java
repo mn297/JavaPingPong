@@ -11,8 +11,8 @@ import java.awt.Color;
 public class Sim2 extends GraphicsProgram {
 
     //screen
-    public static final int HEIGHT = 400;
-    public static final int WIDTH = 200;
+    public static final int HEIGHT = 600;
+    public static final int WIDTH = 1280;
     public static final int OFFSET = 200;
 
     //coordinates
@@ -58,7 +58,7 @@ public class Sim2 extends GraphicsProgram {
         GPoint p = W2S(new GPoint(Xinit, Yinit));
         double ScrX = p.getX();
         double ScrY = p.getY();
-        GOval myBall = new GOval(ScrX, ScrY, 2 * bSize*Xs, 2 * bSize *Xs);
+        GOval myBall = new GOval(ScrX-bSize*Xs, -bSize*Ys, 2 * bSize*Xs, 2 * bSize *Xs);
 //        GOval myBall = new GOval(10,10);
         myBall.setColor(Color.RED);
         myBall.setFilled(true);
