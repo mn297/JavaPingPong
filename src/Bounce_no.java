@@ -21,13 +21,11 @@ public class Bounce_no extends GraphicsProgram {
     public static final int OFFSET = 200;
 
     //coordinates transformation
-    public static final double ppTableXlen = 2.74;
-    public static final double ppTableYlen = 1.52;
 
     public static final double Xmin = 0;
-    public static final double Xmax = ppTableXlen; //2.74 default
+    public static final double Xmax = 2.74; //2.74 default
     public static final double Ymin = 0.0;
-    public static final double Ymax = ppTableYlen; //1.52 default
+    public static final double Ymax = 1.52; //1.52 default
     public static final int xmin = 0;
     public static final int xmax = WIDTH;
     public static final int ymin = 0;
@@ -53,10 +51,10 @@ public class Bounce_no extends GraphicsProgram {
     //energy
     private static final double ETHR = 0.001;
 
-    public static final double Vdef = 4.0;
-    public static final double Tdef = 55.0;
+    public static final double Vdef = 3.0;
+    public static final double Tdef = 10.0;
 
-    public static final int SLEEP = 10;
+    public static final double SLEEP = 10;
     public static final double TICK = SLEEP / 1000.0;
 
     //Credits to Professor Frank Ferrie, Assignment 1 handout
@@ -99,9 +97,9 @@ public class Bounce_no extends GraphicsProgram {
 
 
         //input parameters, ask user
-        double Vo = Vdef;
-        double theta = Tdef;
-        double loss = 0.1;
+        double Vo = readDouble("Enter initial velocity: "); // default Vdef
+        double theta = readDouble("Enter launch angle: "); //default Tdef
+        double loss = readDouble("Enter loss: ");
 
 
         double Xo = Xinit;
@@ -116,32 +114,36 @@ public class Bounce_no extends GraphicsProgram {
         System.out.println("\t\t\t Ball Position and Velocity\n");
 
         //initialize energy as class variables
-        double PE = bMass * g * (Vox * Vt / g * (1 - Math.exp(-g * time / Vt)));
+        double PE = bMass * g * (Yo + (Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time)); //bMass * g *(Y+Yo)
         double KEx = 0.5 * bMass * Math.pow(Vox * Math.exp(-g * time / Vt), 2);
         double KEy = 0.5 * bMass * Math.pow((Voy + Vt) * Math.exp(-g * time / Vt) - Vt, 2);
-
+//Credits to Professor Frank Ferrie, Assignment 1 handout
         while (RUNNING) {
+//
             //speed and displacement
             double X = Vox * Vt / g * (1 - Math.exp(-g * time / Vt));
             double Y = Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time;
             double Vx = Vox * Math.exp(-g * time / Vt);
             double Vy = (Voy + Vt) * Math.exp(-g * time / Vt) - Vt;
 
+
             //ground collision handler
-            if (Y + Yo <= bSize) {
-                PE = 0; //no potential energy on ground
+            if (Vy < 0 && Y + Yo <= bSize) {
+                PE = 0; //no potential energy on ground default 0
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
-                if (Vx < 0) { //check if Vx was backwards to maintain that direction
+                if (Vx < 0) {
                     Vox = (-1) * Math.sqrt(2 * KEx / bMass);
                 } else {
                     Vox = Math.sqrt(2 * KEx / bMass);
                 }
+
+
                 Voy = Math.sqrt(2 * KEy / bMass);
 
                 //reset state
                 Xo += X;
-                Yo = bSize; //??why not Yo+=Y
+                Yo = bSize; //??why not Yo+=Y, bSize because offset from ground to midball
                 X = 0; //??why need to be 0? its recalculated everytime
                 Y = 0;
                 time = 0;
@@ -149,15 +151,15 @@ public class Bounce_no extends GraphicsProgram {
 
             //right wall collision handler
             if ((X + Xo) >= (XwallR - bSize) && Vx > 0) { //default XwallR - bSize
-                PE = bMass * g * (Y+Yo);
+                PE = bMass * g * (Y + Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
                 Vox = (-1) * Math.sqrt(2 * KEx / bMass);
                 Voy = Math.sqrt(2 * KEy / bMass);
-                if(Vy < 0 ) Voy=-Voy; //maintain Vy direction
+                if (Vy < 0) Voy = -Voy; //maintain Vy direction
 
                 //reset state
-                Xo = (XwallR - bSize); // default XwallR - bSize
+                Xo = (XwallR - bSize); // default XwallR - bSize, same as if condition
                 Yo += Y;
                 X = 0;
                 Y = 0;
@@ -165,16 +167,16 @@ public class Bounce_no extends GraphicsProgram {
             }
 
             //left wall collision handler
-            if ((X + Xo) <= (XwallL+bSize) && Vx < 0) { //default: XwallL+bSize
-                PE = bMass * g * (Y+Yo);
+            if ((X + Xo) <= (XwallL + bSize) && Vx < 0) { //default: XwallL+bSize
+                PE = bMass * g * (Y + Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vx * Vx * (1 - loss);
-                Vox = Math.sqrt(2 * KEx / bMass);
+                Vox = Math.abs(Math.sqrt(2 * KEx / bMass));
                 Voy = Math.sqrt(2 * KEy / bMass);
-                if(Vy < 0 ) Voy=-Voy; //maintain Vy direction
+                if (Vy < 0) Voy = -Voy; //maintain Vy direction
 
                 //reset state
-                Xo = XwallL+bSize; //default XwallL+bSize
+                Xo = XwallL + bSize; //default XwallL+bSize
                 Yo += Y;
                 X = 0;
                 Y = 0;
@@ -182,38 +184,38 @@ public class Bounce_no extends GraphicsProgram {
             }
 
             if (TEST)
-                System.out.printf("t: %.2f\t\t X: %.2f\t Y:%.2f\t Vx: %.2f\t Vy: %.2f\n",
+                System.out.printf("t: %.2f\t\t X: %.2f\t Y:%.2f\t Vx: %.2f\t Vy: %.2f \n ",
                         time,
                         X + Xo,
                         Y + Yo,
                         Vx,
-                        Vy);
-            pause(SLEEP);
+                        Vy
+                );
+//            pause(SLEEP);
 
 
-            if (Y + Yo <= bSize) RUNNING = false;
 
-            p = W2S(new GPoint(Xo + X -bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
+            p = W2S(new GPoint(Xo + X - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
             ScrX = p.getX();
             ScrY = p.getY();
             myBall.setLocation(p);
-            if(time>0) trace(ScrX, ScrY); // fix first trace (optional)
+            if (time > 0) trace(ScrX, ScrY); // fix first trace (optional)
 
 
-//            pause(100);
+            if (Vy < 0 && Y + Yo <= bSize) RUNNING = false;
             time += TICK;
 
 
         }
     }
-
+    //Credits to Professor Frank Ferrie, Assignment 1 handout
     GPoint W2S(GPoint P) {
 
         double X = P.getX();
         double Y = P.getY();
 
         double x = (X - Xmin) * Xs;
-        double y = (double)ymax - ((Y - Ymin) * Ys);
+        double y = (double) ymax - ((Y - Ymin) * Ys);
 
         return new GPoint(x, y);
 
