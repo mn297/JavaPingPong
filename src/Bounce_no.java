@@ -10,7 +10,7 @@ import acm.program.GraphicsProgram;
 import java.awt.*;
 
 //Credits to Professor Frank Ferrie, Assignment 1 handout
-public class Bounce extends GraphicsProgram {
+public class Bounce_no extends GraphicsProgram {
     //DEBUG purposes
     private static final boolean DEBUG = false;
     private static final boolean TEST = true;
@@ -64,7 +64,7 @@ public class Bounce extends GraphicsProgram {
         boolean RUNNING = true;
 
         //window size
-        this.resize(WIDTH+OFFSET, HEIGHT + OFFSET);
+        this.resize(WIDTH, HEIGHT + OFFSET);
 
         //plane
         GRect gPlane = new GRect(0, HEIGHT, WIDTH, wallThickness);
@@ -101,7 +101,7 @@ public class Bounce extends GraphicsProgram {
         double theta = readDouble("Enter launch angle: "); //default Tdef
         double loss = readDouble("Enter loss: ");
 
-//INITIALIZE SIMULATION PARAMETERS
+
         double Xo = Xinit;
         double Yo = Yinit;
         double time = 0;
@@ -117,7 +117,7 @@ public class Bounce extends GraphicsProgram {
         double PE = bMass * g * (Yo + (Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time)); //bMass * g *(Y+Yo)
         double KEx = 0.5 * bMass * Math.pow(Vox * Math.exp(-g * time / Vt), 2);
         double KEy = 0.5 * bMass * Math.pow((Voy + Vt) * Math.exp(-g * time / Vt) - Vt, 2);
-
+//Credits to Professor Frank Ferrie, Assignment 1 handout
         while (RUNNING) {
 //
             //speed and displacement
@@ -195,20 +195,20 @@ public class Bounce extends GraphicsProgram {
 
 
 
-
             p = W2S(new GPoint(Xo + X - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
             ScrX = p.getX();
             ScrY = p.getY();
             myBall.setLocation(p);
             if (time > 0) trace(ScrX, ScrY); // fix first trace (optional)
 
-            if ((KEx + KEy + PE) < ETHR) RUNNING = false;
+
+            if (Vy < 0 && Y + Yo <= bSize) RUNNING = false;
             time += TICK;
 
 
         }
     }
-
+    //Credits to Professor Frank Ferrie, Assignment 1 handout
     GPoint W2S(GPoint P) {
 
         double X = P.getX();
