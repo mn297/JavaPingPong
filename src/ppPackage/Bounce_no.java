@@ -1,4 +1,4 @@
-/*
+package ppPackage;/*
     The code below contains lines from ECSE 202 assigment 1 handout by Professor Frank Ferrie.
  */
 

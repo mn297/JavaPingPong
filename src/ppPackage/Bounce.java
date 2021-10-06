@@ -1,7 +1,7 @@
-/*
+package ppPackage;/*
     The code below contains lines from ECSE 202 assigment 1 handout by Professor Frank Ferrie.
  */
-//MARTIN NGUYEN 261003487
+
 import acm.graphics.GOval;
 import acm.graphics.GPoint;
 import acm.graphics.GRect;
@@ -10,7 +10,7 @@ import acm.program.GraphicsProgram;
 import java.awt.*;
 
 //Credits to Professor Frank Ferrie, Assignment 1 handout
-public class ppSim extends GraphicsProgram {
+public class Bounce extends GraphicsProgram {
     //DEBUG purposes
     private static final boolean DEBUG = false;
     private static final boolean TEST = true;
@@ -119,7 +119,7 @@ public class ppSim extends GraphicsProgram {
         double KEy = 0.5 * bMass * Math.pow((Voy + Vt) * Math.exp(-g * time / Vt) - Vt, 2);
 
         while (RUNNING) {
-
+//
             //speed and displacement
             double X = Vox * Vt / g * (1 - Math.exp(-g * time / Vt));
             double Y = Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time;
@@ -170,7 +170,7 @@ public class ppSim extends GraphicsProgram {
             if ((X + Xo) <= (XwallL + bSize) && Vx < 0) { //default: XwallL+bSize
                 PE = bMass * g * (Y + Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
-                KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
+                KEy = 0.5 * bMass * Vx * Vx * (1 - loss);
                 Vox = Math.abs(Math.sqrt(2 * KEx / bMass));
                 Voy = Math.sqrt(2 * KEy / bMass);
                 if (Vy < 0) Voy = -Voy; //maintain Vy direction
@@ -226,5 +226,4 @@ public class ppSim extends GraphicsProgram {
         add(dot);
     }
 }
-//MARTIN NGUYEN 261003487
 //Credits to Professor Frank Ferrie, Assignment 1 handout
