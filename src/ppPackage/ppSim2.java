@@ -1,14 +1,12 @@
 package ppPackage;
-
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
-
-import java.awt.*;
-
 import static ppPackage.ppSimParams.*;
+import java.awt.Color;
 
 
-public class ppSim extends GraphicsProgram {
+
+public class ppSim2 extends GraphicsProgram {
     boolean SINGLEBALLTEST = false;
     RandomGenerator rgen = new RandomGenerator();
     private static final int NUMBALLS = 100;
@@ -24,7 +22,7 @@ public class ppSim extends GraphicsProgram {
 
 
     public static void main(String[] args) {
-        new ppSim().start(args);
+        new ppSim2().start(args);
     }
 
     public void run() {
