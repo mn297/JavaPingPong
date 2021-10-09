@@ -1,8 +1,8 @@
 package ppPackage;
 
 public class ppSimParams {
-    private static final boolean DEBUG = false;
-    private static final boolean TEST = true;
+    public static final boolean DEBUG = false;
+    public static final boolean TEST = true;
 
     //screen
     public static final int HEIGHT = 600; //600 default
@@ -38,11 +38,13 @@ public class ppSimParams {
     public static final double Yinit = Ymax / 2; // or HEIGHT/2
 
     //energy
-    private static final double ETHR = 0.001;
+    public static final double ETHR = 0.001;
 
     public static final double Vdef = 3.0;
     public static final double Tdef = 10.0;
 
     public static final double SLEEP = 10;
     public static final double TICK = SLEEP / 1000.0;
+
+
 }

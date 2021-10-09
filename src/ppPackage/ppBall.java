@@ -1,10 +1,13 @@
 package ppPackage;
 
 import acm.graphics.GOval;
+import acm.graphics.GPoint;
 import acm.program.GraphicsProgram;
 
 import java.awt.*;
+
 import static ppPackage.ppSimParams.*;
+
 public class ppBall extends Thread {
 
 
@@ -17,18 +20,174 @@ public class ppBall extends Thread {
     private GraphicsProgram GProgram;//Instance of ppSim class (this)
     GOval myBall; // Graphics object representing ball
 
+    /**
+     * The constructor for the ppBall class copies parameters to instance variables, creates an
+     * instance of a GOval to represent the ping-pong ball, and adds it to the display.
+     *
+     * @param Xinit - starting position of the ball X (meters)
+     * @param Yinit - starting position of the ball Y (meters)
+     * @param Vo - initial velocity (meters/second)
+     * @param theta - initial angle to the horizontal (degrees)
+     * @param loss - loss on collision ([0,1])
+     * @param color - ball color (Color)
+     * @param GProgram - a reference to the ppSim class used to manage the display
+     */
     public ppBall(double Xinit, double Yinit, double Vo, double theta, double loss, Color color, GraphicsProgram GProgram) {
-        this.Xinit=Xinit;// Copy constructor parameters to instance variables
-        this.Yinit=Yinit;
-        this.Vo=Vo;
-        this.theta=theta;
-        this.loss=loss;
-        this.color=color;
-        this.GProgram=GProgram;
-        GOval myBall = new GOval(Xinit, Yinit, 2 * bSize * Xs, 2 * bSize * Ys);
+        this.Xinit = Xinit;// Copy constructor parameters to instance variables
+        this.Yinit = Yinit;
+        this.Vo = Vo;
+        this.theta = theta;
+        this.loss = loss;
+        this.color = color;
+        this.GProgram = GProgram;
+
+        GPoint p = W2S(new GPoint(Xinit, Yinit));
+        double ScrX = p.getX();
+        double ScrY = p.getY();
+        myBall = new GOval(ScrX, ScrY, 2 * bSize * Xs, 2 * bSize * Ys);
         myBall.setColor(color);
         myBall.setFilled(true);
         GProgram.add(myBall);
 
+    }
+
+    /**
+     * In a thread, the run method is NOT started automatically (like in Assignment 1).
+     * Instead, a start message must be sent to each instance of the ppBall class, e.g.,
+     * ppBall myBall = new ppBall (--parameters--);
+     * myBall.start();
+     * The body of the run method is essentially the simulator code you wrote for A1.
+     */
+    public void run() { //??why public, ppBall no export
+        GPoint p;
+        double ScrX;
+        double ScrY ;
+
+        double Xo = Xinit;
+        double Yo = Yinit;
+        double time = 0;
+
+        double Vt = bMass * g / (4 * Pi * bSize * bSize * k);
+        double Vox = Vo * Math.cos(theta * Pi / 180);
+        double Voy = Vo * Math.sin(theta * Pi / 180);
+
+        //console title
+        System.out.println("\t\t\t Ball Position and Velocity\n");
+
+        //initialize energy as class variables
+        double PE = bMass * g * (Yo + (Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time)); //bMass * g *(Y+Yo)
+        double KEx = 0.5 * bMass * Math.pow(Vox * Math.exp(-g * time / Vt), 2);
+        double KEy = 0.5 * bMass * Math.pow((Voy + Vt) * Math.exp(-g * time / Vt) - Vt, 2);
+
+        boolean RUNNING = true;
+        while (RUNNING) {
+//
+            //speed and displacement
+            double X = Vox * Vt / g * (1 - Math.exp(-g * time / Vt));
+            double Y = Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time;
+            double Vx = Vox * Math.exp(-g * time / Vt);
+            double Vy = (Voy + Vt) * Math.exp(-g * time / Vt) - Vt;
+
+
+            //ground collision handler
+            if (Vy < 0 && Y + Yo <= bSize) {
+                PE = 0; //no potential energy on ground default 0
+                KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
+                KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
+                if (Vx < 0) {
+                    Vox = (-1) * Math.sqrt(2 * KEx / bMass);
+                } else {
+                    Vox = Math.sqrt(2 * KEx / bMass);
+                }
+
+
+                Voy = Math.sqrt(2 * KEy / bMass);
+
+                //reset state
+                Xo += X;
+                Yo = bSize; //??why not Yo+=Y, bSize because offset from ground to midball
+                X = 0; //??why need to be 0? its recalculated everytime
+                Y = 0;
+                time = 0;
+            }
+
+            //right wall collision handler
+            if ((X + Xo) >= (XwallR - bSize) && Vx > 0) { //default XwallR - bSize
+                PE = bMass * g * (Y + Yo);
+                KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
+                KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
+                Vox = (-1) * Math.sqrt(2 * KEx / bMass);
+                Voy = Math.sqrt(2 * KEy / bMass);
+                if (Vy < 0) Voy = -Voy; //maintain Vy direction
+
+                //reset state
+                Xo = (XwallR - bSize); // default XwallR - bSize, same as if condition
+                Yo += Y;
+                X = 0;
+                Y = 0;
+                time = 0;
+            }
+
+            //left wall collision handler
+            if ((X + Xo) <= (XwallL + bSize) && Vx < 0) { //default: XwallL+bSize
+                PE = bMass * g * (Y + Yo);
+                KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
+                KEy = 0.5 * bMass * Vx * Vx * (1 - loss);
+                Vox = Math.abs(Math.sqrt(2 * KEx / bMass));
+                Voy = Math.sqrt(2 * KEy / bMass);
+                if (Vy < 0) Voy = -Voy; //maintain Vy direction
+
+                //reset state
+                Xo = XwallL + bSize; //default XwallL+bSize
+                Yo += Y;
+                X = 0;
+                Y = 0;
+                time = 0;
+            }
+
+
+                try {
+                    this.sleep((long) SLEEP);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+//            GProgram.pause(SLEEP);
+
+
+            p = W2S(new GPoint(Xo + X - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
+            ScrX = p.getX();
+            ScrY = p.getY();
+            myBall.setLocation(p);
+            if (time > 0) trace(ScrX, ScrY); // fix first trace (optional)
+
+            if ((KEx + KEy + PE) < ETHR) RUNNING = false;
+            time += TICK;
+
+
+        }
+
+
+    }
+
+    /***
+     * Method to convert from world to screen coordinates.
+     * @param P a point object in world coordinates
+     * @return p the corresponding point object in screen coordinates
+     */
+
+    GPoint W2S(GPoint P) {
+        return new GPoint((P.getX() - Xmin) * Xs, ymax - (P.getY() - Ymin) * Ys);
+    }
+
+    /***
+     * A simple method to plot a dot at the current location in screen coordinates
+     * @param ScrX horizontal screen coordinate
+     * @param ScrY vertical screen coordinate
+     */
+    private void trace(double ScrX, double ScrY) {
+        GOval pt = new GOval(ScrX + bSize * Xs, ScrY + bSize * Ys, PD, PD);
+        pt.setColor(Color.BLACK);
+        pt.setFilled(true);
+        GProgram.add(pt);
     }
 }
