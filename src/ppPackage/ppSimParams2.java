@@ -8,7 +8,7 @@ public class ppSimParams2 {
     public static final double ppTableXlen= 2.74;// Length
     public static final double ppTableHgt= 1.52;// Ceiling
     public static final double XwallL= 0.05;// Position of left wall
-    public static final double XwallR= 2.69// Position of right wall
+    public static final double XwallR= 2.69;// Position of right wall
 
     // 2. Parameters defined in simulation coordinates (MKS, X-->range, Y-->height)
     public static final double g= 9.8;// MKS

@@ -8,7 +8,7 @@ import java.awt.*;
 
 import static ppPackage.ppSimParams.*;
 
-public class ppBall extends Thread {
+public class ppBall2 extends Thread {
 
 
     private double Xinit;// Initial position of ball -X
@@ -32,7 +32,7 @@ public class ppBall extends Thread {
      * @param color    - ball color (Color)
      * @param GProgram - a reference to the ppSim class used to manage the display
      */
-    public ppBall(double Xinit, double Yinit, double Vo, double theta, double loss, Color color, GraphicsProgram GProgram) {
+    public ppBall2(double Xinit, double Yinit, double Vo, double theta, double loss, Color color, GraphicsProgram GProgram) {
         this.Xinit = Xinit;// Copy constructor parameters to instance variables
         this.Yinit = Yinit;
         this.Vo = Vo;
@@ -153,7 +153,11 @@ public class ppBall extends Thread {
                         Vx,
                         Vy
                 );
-
+//            try {
+//                this.sleep((long) SLEEP);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             GProgram.pause(SLEEP);
 
 
