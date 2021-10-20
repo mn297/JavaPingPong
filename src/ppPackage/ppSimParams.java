@@ -1,5 +1,8 @@
 package ppPackage;
-
+/**
+ * Parameters for the whole program
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
+ */
 public class ppSimParams {
     public static final boolean DEBUG = false;
     public static final boolean TEST = true;
@@ -24,8 +27,8 @@ public class ppSimParams {
     public static final double PD = 1;
 
     public static final double wallThickness = 3; //useless
-    public static final double XwallL = 0.05;
-    public static final double XwallR = 2.69;
+    public static final double XwallL = 0.05; //default 0.05
+    public static final double XwallR = 2.69; // default 2.69
 
 
     //simulation parameters

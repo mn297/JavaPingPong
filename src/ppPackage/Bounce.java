@@ -143,9 +143,8 @@ public class Bounce extends GraphicsProgram {
 
                 //reset state
                 Xo += X;
-                Yo = bSize; //??why not Yo+=Y, bSize because offset from ground to midball
-                X = 0; //??why need to be 0? its recalculated everytime
-                Y = 0;
+                Yo = bSize;
+                X = 0;
                 time = 0;
             }
 
@@ -159,7 +158,7 @@ public class Bounce extends GraphicsProgram {
                 if (Vy < 0) Voy = -Voy; //maintain Vy direction
 
                 //reset state
-                Xo = (XwallR - bSize); // default XwallR - bSize, same as if condition
+                Xo = (XwallR - bSize);
                 Yo += Y;
                 X = 0;
                 Y = 0;
@@ -167,10 +166,10 @@ public class Bounce extends GraphicsProgram {
             }
 
             //left wall collision handler
-            if ((X + Xo) <= (XwallL + bSize) && Vx < 0) { //default: XwallL+bSize
+            if ((X + Xo) <= (XwallL + bSize) && Vx < 0) {
                 PE = bMass * g * (Y + Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
-                KEy = 0.5 * bMass * Vx * Vx * (1 - loss);
+                KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
                 Vox = Math.abs(Math.sqrt(2 * KEx / bMass));
                 Voy = Math.sqrt(2 * KEy / bMass);
                 if (Vy < 0) Voy = -Voy; //maintain Vy direction

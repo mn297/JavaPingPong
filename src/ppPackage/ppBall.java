@@ -7,7 +7,10 @@ import acm.program.GraphicsProgram;
 import java.awt.*;
 
 import static ppPackage.ppSimParams.*;
-
+/**
+ * Wrapper for a GOval instance and handles physics simulation
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
+ */
 public class ppBall extends Thread {
 
 
@@ -58,7 +61,7 @@ public class ppBall extends Thread {
      * myBall.start();
      * The body of the run method is essentially the simulator code you wrote for A1.
      */
-    public void run() { //??why public, ppBall no export
+    public void run() {
         GPoint p;
         double ScrX;
         double ScrY;
@@ -132,13 +135,13 @@ public class ppBall extends Thread {
             if ((X + Xo) <= (XwallL + bSize) && Vx < 0) { //default: XwallL+bSize
                 PE = bMass * g * (Y + Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
-                KEy = 0.5 * bMass * Vx * Vx * (1 - loss);
+                KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
                 Vox = Math.abs(Math.sqrt(2 * KEx / bMass));
                 Voy = Math.sqrt(2 * KEy / bMass);
                 if (Vy < 0) Voy = -Voy; //maintain Vy direction
 
                 //reset state
-                Xo = XwallL + bSize; //default XwallL+bSize
+                Xo = (XwallL + bSize); //default XwallL+bSize
                 Yo += Y;
                 X = 0;
                 Y = 0;
@@ -154,7 +157,7 @@ public class ppBall extends Thread {
                         Vy
                 );
 
-            GProgram.pause(SLEEP);
+            GProgram.pause(SLEEP/10);
 
 
             p = W2S(new GPoint(Xo + X - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize

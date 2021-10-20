@@ -5,9 +5,16 @@ import acm.program.GraphicsProgram;
 
 import java.awt.*;
 import static ppPackage.ppSimParams.*;//import all instead of writing ppSImParams at every constant
-
-
+/**
+ * Walls for ball physics simulation
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
+*/
 public class ppTable {
+    /**
+     * Construct the walls for ball physics simulation
+     * @param GProgram the GraphicsProgram in which to draw the walls
+
+     */
     public ppTable(GraphicsProgram GProgram) {
         //plane
         GRect gPlane = new GRect(0, HEIGHT, WIDTH, wallThickness);
