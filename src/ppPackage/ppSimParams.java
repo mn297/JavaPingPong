@@ -9,7 +9,7 @@ public class ppSimParams {
     // 1. Paramters defined in screen coordinates (pixels, acm coordinates)
     public static final int WIDTH = 1280;   // n.b. screen coordinates
     public static final int HEIGHT = 600;
-    public static final int OFFSET = 200;/
+    public static final int OFFSET = 200;
     // / 2. Ping-pong table parameters
     public static final double ppTableXlen = 2.74;  // Length
     public static final double ppTableHgt = 1.52;   // Ceiling

@@ -145,20 +145,20 @@ public class ppBall2 extends Thread {
                 time = 0;
             }
 
-            if (TEST)
-                System.out.printf("t: %.2f\t\t X: %.2f\t Y:%.2f\t Vx: %.2f\t Vy: %.2f \n ",
-                        time,
-                        X + Xo,
-                        Y + Yo,
-                        Vx,
-                        Vy
-                );
+//            if (TEST)
+//                System.out.printf("t: %.2f\t\t X: %.2f\t Y:%.2f\t Vx: %.2f\t Vy: %.2f \n ",
+//                        time,
+//                        X + Xo,
+//                        Y + Yo,
+//                        Vx,
+//                        Vy
+//                );
 //            try {
 //                this.sleep((long) SLEEP);
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-            GProgram.pause(SLEEP);
+//            GProgram.pause(SLEEP);
 
 
             p = W2S(new GPoint(Xo + X - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize

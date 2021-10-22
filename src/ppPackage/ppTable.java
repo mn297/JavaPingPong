@@ -10,13 +10,14 @@ import static ppPackage.ppSimParams.*;
 
 /**
  * Walls for ball physics simulation
+ *
  * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
-*/
+ */
 public class ppTable {
     /**
      * Construct the walls for ball physics simulation
+     *
      * @param GProgram the GraphicsProgram in which to draw the walls
-
      */
     public ppTable(GraphicsProgram GProgram) {
         //plane
@@ -37,10 +38,19 @@ public class ppTable {
         rightWall.setFilled(true);
         GProgram.add(rightWall);
     }
+
     public GPoint W2S(GPoint P) {
+
         return new GPoint((P.getX() - Xmin) * Xs, ymax - (P.getY() - Ymin) * Ys);
     }
 
+    public GPoint S2W(GPoint P) {
+        double x_s = P.getX();
+        double y_s = P.getY();
+        double X_w = (x_s/Xs) + Xmin;
+        double Y_w = ((Ymax-y_s)/Ys) + Ymin;
 
+        return new GPoint(X_w, Y_w);
 
+    }
 }
