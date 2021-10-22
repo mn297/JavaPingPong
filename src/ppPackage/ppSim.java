@@ -11,6 +11,8 @@ import static ppPackage.ppSimParams.*;
  * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
  */
 public class ppSim extends GraphicsProgram {
+    ppTable myTable;
+    ppPaddle myPaddle;
     public static void main(String[] args) {
         new ppSim().start(args);
     }
@@ -20,7 +22,8 @@ public class ppSim extends GraphicsProgram {
      */
     public void run() {
         this.resize(ppSimParams.WIDTH + OFFSET, ppSimParams.HEIGHT + OFFSET);
-        ppTable myTable = new ppTable(this);
+         myTable = new ppTable(this);
+        myPaddle = new ppPaddle(this);
 
         // get data from user here
 //        double Vo = readDouble("Enter initial velocity: "); // default Vdef

@@ -1,10 +1,13 @@
 package ppPackage;
 
+import acm.graphics.GPoint;
 import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
 import java.awt.*;
-import static ppPackage.ppSimParams.*;//import all instead of writing ppSImParams at every constant
+
+import static ppPackage.ppSimParams.*;
+
 /**
  * Walls for ball physics simulation
  * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
@@ -17,7 +20,7 @@ public class ppTable {
      */
     public ppTable(GraphicsProgram GProgram) {
         //plane
-        GRect gPlane = new GRect(0, HEIGHT, WIDTH, wallThickness);
+        GRect gPlane = new GRect(0, HEIGHT, WIDTH, 0);
         gPlane.setColor(Color.BLACK);
         gPlane.setFilled(true);
         GProgram.add(gPlane);
@@ -33,6 +36,9 @@ public class ppTable {
         rightWall.setColor(Color.RED);
         rightWall.setFilled(true);
         GProgram.add(rightWall);
+    }
+    public GPoint W2S(GPoint P) {
+        return new GPoint((P.getX() - Xmin) * Xs, ymax - (P.getY() - Ymin) * Ys);
     }
 
 
