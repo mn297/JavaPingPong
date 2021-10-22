@@ -29,6 +29,11 @@ public class ppSim extends GraphicsProgram {
         this.resize(ppSimParams.WIDTH + OFFSET, ppSimParams.HEIGHT + OFFSET);
         myTable = new ppTable(this);
         myPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, myTable, this);
+        println(myTable.S2W(new GPoint(500,500)).getX());
+        println(myTable.S2W(new GPoint(500,500)).getY());
+        println(myTable.W2S(new GPoint(myTable.S2W(new GPoint(500,500)).getX(),0)).getX());
+
+
 //        addMouseListeners();
         // get data from user here
 //        double Vo = readDouble("Enter initial velocity: "); // default Vdef
