@@ -7,8 +7,10 @@ import acm.program.GraphicsProgram;
 import java.awt.*;
 
 import static ppPackage.ppSimParams.*;
+
 /**
  * Wrapper for a GOval instance and handles physics simulation
+ *
  * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
  */
 public class ppBall extends Thread {
@@ -21,7 +23,9 @@ public class ppBall extends Thread {
     private double loss;// Energy loss on collision
     private Color color;// Color of ball
     private GraphicsProgram GProgram;//Instance of ppSim class (this)
+    ppTable myTable;
     GOval myBall; // Graphics object representing ball
+    ppPaddle RPaddle;
 
     /**
      * The constructor for the ppBall class copies parameters to instance variables, creates an
@@ -33,18 +37,20 @@ public class ppBall extends Thread {
      * @param theta    - initial angle to the horizontal (degrees)
      * @param loss     - loss on collision ([0,1])
      * @param color    - ball color (Color)
+     * @param myTable  - ppTable instance from which to get W2S and S2W methods
      * @param GProgram - a reference to the ppSim class used to manage the display
      */
-    public ppBall(double Xinit, double Yinit, double Vo, double theta, double loss, Color color, GraphicsProgram GProgram) {
+    public ppBall(double Xinit, double Yinit, double Vo, double theta, double loss, Color color, ppTable myTable, GraphicsProgram GProgram) {
         this.Xinit = Xinit;// Copy constructor parameters to instance variables
         this.Yinit = Yinit;
         this.Vo = Vo;
         this.theta = theta;
         this.loss = loss;
         this.color = color;
+        this.myTable = myTable;
         this.GProgram = GProgram;
 
-        GPoint p = W2S(new GPoint(Xinit, Yinit));
+        GPoint p = W2S(new GPoint(Xinit - bSize, Yinit - bSize));
         double ScrX = p.getX();
         double ScrY = p.getY();
         myBall = new GOval(ScrX, ScrY, 2 * bSize * Xs, 2 * bSize * Ys);
@@ -114,25 +120,36 @@ public class ppBall extends Thread {
                 time = 0;
             }
 
-            //right wall collision handler
-            if ((X + Xo) >= (XwallR - bSize) && Vx > 0) { //default XwallR - bSize
-                PE = bMass * g * (Y + Yo);
-                KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
-                KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
-                Vox = (-1) * Math.sqrt(2 * KEx / bMass);
-                Voy = Math.sqrt(2 * KEy / bMass);
-                if (Vy < 0) Voy = -Voy; //maintain Vy direction
+            //paddle collision handler TODO
+            if ((X + Xo) >= (RPaddle.getP().getX() - ppPaddleW / 2 - bSize) && Vx > 0) {
+                if (RPaddle.contact(Xo + X, Yo + Y) && Vx > 0) { //default XwallR - bSize
+                    PE = bMass * g * (Y + Yo);
+                    KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
+                    KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
+                    Vox = (-1) * Math.sqrt(2 * KEx / bMass);
+                    Voy = Math.sqrt(2 * KEy / bMass);
 
-                //reset state
-                Xo = (XwallR - bSize); // default XwallR - bSize, same as if condition
-                Yo += Y;
-                X = 0;
-                Y = 0;
-                time = 0;
+                    Vox = Vox * ppPaddleXgain;
+                    Voy = Voy * ppPaddleYgain * RPaddle.getSgnVy(); //maintain Vy direction
+                    //reset state
+                    Xo = (RPaddle.getP().getX() - ppPaddleW / 2 - bSize); // default XwallR - bSize, same as if condition
+                    Yo += Y;
+                    X = 0;
+                    Y = 0;
+                    time = 0;
+                } else { // make ball appear at center X of paddle when program stops
+                    p = W2S(new GPoint(RPaddle.getP().getX() - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
+                    ScrX = p.getX();
+                    ScrY = p.getY();
+                    myBall.setLocation(p);
+                    trace(ScrX, ScrY);
+                    break;
+
+                };
             }
-
             //left wall collision handler
-            if ((X + Xo) <= (XwallL + bSize) && Vx < 0) { //default: XwallL+bSize
+            if (Vx < 0 && (X + Xo) <= (XwallL + bSize)) { //default: XwallL+bSize
+                System.out.println("COLLIDE!!!!");
                 PE = bMass * g * (Y + Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
@@ -148,16 +165,16 @@ public class ppBall extends Thread {
                 time = 0;
             }
 
-//            if (TEST)
-//                System.out.printf("t: %.2f\t\t X: %.2f\t Y:%.2f\t Vx: %.2f\t Vy: %.2f \n ",
-//                        time,
-//                        X + Xo,
-//                        Y + Yo,
-//                        Vx,
-//                        Vy
-//                );
-//
-//            GProgram.pause(SLEEP/10);
+            if (MESG)
+                System.out.printf("t: %.2f\t\t X: %.2f\t Y:%.2f\t Vx: %.2f\t Vy: %.2f \n ",
+                        time,
+                        X + Xo,
+                        Y + Yo,
+                        Vx,
+                        Vy
+                );
+
+            GProgram.pause(TICK * TSCALE);
 
 
             p = W2S(new GPoint(Xo + X - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
@@ -180,7 +197,6 @@ public class ppBall extends Thread {
      * @param P a point object in world coordinates
      * @return p the corresponding point object in screen coordinates
      */
-
     GPoint W2S(GPoint P) {
         return new GPoint((P.getX() - Xmin) * Xs, ymax - (P.getY() - Ymin) * Ys);
     }
@@ -196,4 +212,9 @@ public class ppBall extends Thread {
         pt.setFilled(true);
         GProgram.add(pt);
     }
+
+    public void setRightPaddle(ppPaddle myPaddle) {
+        this.RPaddle = myPaddle;
+    }
+
 }

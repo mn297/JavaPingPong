@@ -33,10 +33,10 @@ public class ppTable {
         GProgram.add(leftWall);
 
         //right wall
-        GRect rightWall = new GRect(XwallR * Xs, 0, 0, HEIGHT);
-        rightWall.setColor(Color.RED);
-        rightWall.setFilled(true);
-        GProgram.add(rightWall);
+//        GRect rightWall = new GRect(XwallR * Xs, 0, 0, HEIGHT);
+//        rightWall.setColor(Color.RED);
+//        rightWall.setFilled(true);
+//        GProgram.add(rightWall);
     }
 
     public GPoint W2S(GPoint P) {
@@ -48,7 +48,7 @@ public class ppTable {
         double x_s = P.getX();
         double y_s = P.getY();
         double X_w = (x_s/Xs) + Xmin;
-        double Y_w = ((Ymax-y_s)/Ys) + Ymin;
+        double Y_w = ((ymax-y_s)/Ys) + Ymin;
 
         return new GPoint(X_w, Y_w);
 

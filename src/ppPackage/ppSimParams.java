@@ -7,7 +7,7 @@ package ppPackage;
  */
 public class ppSimParams {
     // 1. Paramters defined in screen coordinates (pixels, acm coordinates)
-    public static final int WIDTH = 1280;   // n.b. screen coordinates
+    public static final int WIDTH = 1280;   // n.b. screen coordinates default 1280x600
     public static final int HEIGHT = 600;
     public static final int OFFSET = 200;
     // / 2. Ping-pong table parameters
@@ -37,12 +37,12 @@ public class ppSimParams {
     public static final double Xinit = XwallL;      // Initial ball location (X)
     public static final double Yinit = Ymax / 2;      // Initial ball location (Y)
     public static final double PD = 1;              // Trace point diameter
-    public static final double TSCALE = 2000;       // Scaling parameter for pause()
+    public static final double TSCALE = 2000;       // Scaling parameter for pause() //default 2000
 
     // 4. Paddle Parameters
     static final double ppPaddleH = 8 * 2.54 / 100; // Paddle height
     static final double ppPaddleW = 0.5 * 2.54 / 100;   // Paddle width
-    static final double ppPaddleXinit = XwallR - ppPaddleW / 2; // Initial Paddle X
+    static final double ppPaddleXinit = XwallR - ppPaddleW / 2; // Initial Paddle X, center
     static final double ppPaddleYinit = Yinit;              // Initial Paddle Y
     static final double ppPaddleXgain = 2.0;        // Vx gain on paddle hit
     static final double ppPaddleYgain = 1.5;        // Vy gain on paddle hit//

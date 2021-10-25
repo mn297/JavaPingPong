@@ -1,7 +1,9 @@
 package ppPackage;
 
+import acm.graphics.GOval;
 import acm.graphics.GPoint;
 import acm.program.GraphicsProgram;
+import acm.util.RandomGenerator;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -16,6 +18,7 @@ import static ppPackage.ppSimParams.*;
 public class ppSim extends GraphicsProgram {
     ppTable myTable;
     ppPaddle myPaddle;
+    ppBall myBall;
 
     public static void main(String[] args) {
         new ppSim().start(args);
@@ -27,34 +30,37 @@ public class ppSim extends GraphicsProgram {
      */
     public void run() {
         this.resize(ppSimParams.WIDTH + OFFSET, ppSimParams.HEIGHT + OFFSET);
+        addMouseListeners();
+
         myTable = new ppTable(this);
+        RandomGenerator rgen = RandomGenerator.getInstance();
+        rgen.setSeed(RSEED);
+
+        // GENERATE PARAMETERS
+        Color iColor = Color.RED;
+        double iYinit = rgen.nextDouble(YinitMIN, YinitMAX);
+        double iLoss = rgen.nextDouble(EMIN, EMAX);
+        double iVel = rgen.nextDouble(VoMIN, VoMAX);
+        double iTheta = rgen.nextDouble(ThetaMIN, ThetaMAX);
+
+
         myPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, myTable, this);
-        println(myTable.S2W(new GPoint(500,500)).getX());
-        println(myTable.S2W(new GPoint(500,500)).getY());
-        println(myTable.W2S(new GPoint(myTable.S2W(new GPoint(500,500)).getX(),0)).getX());
+        myPaddle.setP(new GPoint(ppPaddleXinit, ppPaddleYinit));
+        myBall = new ppBall(Xinit + bSize, iYinit, iVel, iTheta, iLoss, iColor, myTable, this);
+        myBall.setRightPaddle(myPaddle);
+
+        pause(STARTDELAY);
+        myBall.start();
+        myPaddle.start();
 
 
-//        addMouseListeners();
-        // get data from user here
-//        double Vo = readDouble("Enter initial velocity: "); // default Vdef
-//        double theta = readDouble("Enter launch angle: "); //default Tdef
-//        double loss = readDouble("Enter loss: ");
-        double Vo = 9; // default Vdef
-        double theta = 15; //default Tdef
-        double loss = 0.2;
-
-
-//        ppBall myBall = new ppBall(XwallR-2*bSize, Yinit, Vo, theta, loss, Color.RED, this);
-//        myBall.start();
-
-
-//        ppBall myBall = new ppBall(Xinit, Yinit, Vo, theta, loss, Color.RED, this);
-//        ppBall myBall2 = new ppBall(XwallR - 2 * bSize, Yinit, Vo, (180 - theta), loss, Color.BLUE, this);
-//        pause(1500);
-//        myBall.start();
-//        myBall2.start();
-
-
+        //DEBUG
+//        add(new GOval(100, 100, 1, 1)); //all screen coordinates
+//        add(new GOval(200, 200, 1, 1));
+//        add(new GOval(300, 300, 1, 1));
+//        println(myTable.S2W(new GPoint(500, 500)).getX());
+//        println(myTable.S2W(new GPoint(500, 500)).getY());
+//        println(myTable.W2S(new GPoint(myTable.S2W(new GPoint(500, 500)).getX(), 0)).getX());
     }
 
     public void mouseMoved(MouseEvent e) {
