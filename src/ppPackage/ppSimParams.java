@@ -58,7 +58,7 @@ public class ppSimParams {
     static final long RSEED = 8976232;              // Random number gen.seed value//
     // 6. Miscellaneous
     public static final boolean DEBUG = false;      // Debug msg.and single step if true
-    public static final boolean MESG = true;        // Enable status messages on console
+    public static final boolean MESG = false;        // Enable status messages on console
     public static final int STARTDELAY = 1000;      // Delay between setup and start
 
 }

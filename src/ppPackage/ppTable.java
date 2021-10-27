@@ -11,7 +11,7 @@ import static ppPackage.ppSimParams.*;
 /**
  * Walls for ball physics simulation
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
  */
 public class ppTable {
     /**
@@ -38,12 +38,20 @@ public class ppTable {
 //        rightWall.setFilled(true);
 //        GProgram.add(rightWall);
     }
-
+    /***
+     * Method to convert from world to screen coordinates.
+     * @param P a point object in world coordinates
+     * @return p the corresponding point object in screen coordinates
+     */
     public GPoint W2S(GPoint P) {
 
         return new GPoint((P.getX() - Xmin) * Xs, ymax - (P.getY() - Ymin) * Ys);
     }
-
+    /***
+     * Method to convert from screen to world coordinates.
+     * @param P a point object in screen coordinates
+     * @return p the corresponding point object in world coordinates
+     */
     public GPoint S2W(GPoint P) {
         double x_s = P.getX();
         double y_s = P.getY();

@@ -11,7 +11,7 @@ import static ppPackage.ppSimParams.*;
 /**
  * Wrapper for a GOval instance and handles physics simulation
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
  */
 public class ppBall extends Thread {
 
@@ -126,13 +126,22 @@ public class ppBall extends Thread {
                     PE = bMass * g * (Y + Yo);
                     KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                     KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
+
                     Vox = (-1) * Math.sqrt(2 * KEx / bMass);
                     Voy = Math.sqrt(2 * KEy / bMass);
 
+
+                    //debug
+                    System.out.printf("old %.2f \t %.2f \n", Vox, Voy);
+
                     Vox = Vox * ppPaddleXgain;
                     Voy = Voy * ppPaddleYgain * RPaddle.getSgnVy(); //maintain Vy direction
+
+                    //debug
+                    System.out.printf("new %.2f \t %.2f \n", Vox, Voy);
+
                     //reset state
-                    Xo = (RPaddle.getP().getX() - ppPaddleW / 2 - bSize); // default XwallR - bSize, same as if condition
+                    Xo = (RPaddle.getP().getX() - ppPaddleW / 2 - bSize);
                     Yo += Y;
                     X = 0;
                     Y = 0;
@@ -145,11 +154,11 @@ public class ppBall extends Thread {
                     trace(ScrX, ScrY);
                     break;
 
-                };
+                }
+                ;
             }
             //left wall collision handler
             if (Vx < 0 && (X + Xo) <= (XwallL + bSize)) { //default: XwallL+bSize
-                System.out.println("COLLIDE!!!!");
                 PE = bMass * g * (Y + Yo);
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
@@ -197,7 +206,7 @@ public class ppBall extends Thread {
      * @param P a point object in world coordinates
      * @return p the corresponding point object in screen coordinates
      */
-    GPoint W2S(GPoint P) {
+    private GPoint W2S(GPoint P) {
         return new GPoint((P.getX() - Xmin) * Xs, ymax - (P.getY() - Ymin) * Ys);
     }
 
@@ -213,6 +222,10 @@ public class ppBall extends Thread {
         GProgram.add(pt);
     }
 
+    /***
+     * Setter for RPaddle instance variable
+     * @param myPaddle a ppPaddle instance
+     */
     public void setRightPaddle(ppPaddle myPaddle) {
         this.RPaddle = myPaddle;
     }

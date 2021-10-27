@@ -45,7 +45,7 @@ public class ppSim extends GraphicsProgram {
 
 
         myPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, myTable, this);
-        myPaddle.setP(new GPoint(ppPaddleXinit, ppPaddleYinit));
+//        myPaddle.setP(new GPoint(ppPaddleXinit, ppPaddleYinit)); // fix paddle not appearing at start
         myBall = new ppBall(Xinit + bSize, iYinit, iVel, iTheta, iLoss, iColor, myTable, this);
         myBall.setRightPaddle(myPaddle);
 
