@@ -41,8 +41,7 @@ public class ppPaddle extends Thread {
         GPoint p = myTable.W2S(new GPoint(upperLeftX, upperLeftY));
 
         double ScrX = p.getX();
-        double ScrY = p.getX();
-
+        double ScrY = p.getY();
         this.myPaddle = new GRect(ScrX, ScrY, ppPaddleW * Xs, ppPaddleH * Ys);
 
         myPaddle.setFilled(true);

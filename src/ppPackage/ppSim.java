@@ -30,7 +30,7 @@ public class ppSim extends GraphicsProgram {
      */
     public void run() {
         this.resize(ppSimParams.WIDTH + OFFSET, ppSimParams.HEIGHT + OFFSET);
-        addMouseListeners();
+
 
         myTable = new ppTable(this);
         RandomGenerator rgen = RandomGenerator.getInstance();
@@ -48,11 +48,11 @@ public class ppSim extends GraphicsProgram {
 //        myPaddle.setP(new GPoint(ppPaddleXinit, ppPaddleYinit)); // fix paddle not appearing at start
         myBall = new ppBall(Xinit + bSize, iYinit, iVel, iTheta, iLoss, iColor, myTable, this);
         myBall.setRightPaddle(myPaddle);
+        addMouseListeners();
 
         pause(STARTDELAY);
         myBall.start();
         myPaddle.start();
-
 
         //DEBUG
 //        add(new GOval(100, 100, 1, 1)); //all screen coordinates
