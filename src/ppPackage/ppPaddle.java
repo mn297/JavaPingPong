@@ -25,6 +25,13 @@ public class ppPaddle extends Thread {
     GraphicsProgram GProgram;
     ppTable myTable;
 
+    /**
+     *
+     * @param X X coordinate
+     * @param Y Y coordinate
+     * @param myTable ppTable instance from which to import W2S and S2W
+     * @param GProgram the GraphicsProgram instance to add the ppPaddle to
+     */
     public ppPaddle(double X, double Y, ppTable myTable, GraphicsProgram GProgram) {
         this.X = X; //center of paddle
         this.Y = Y;
@@ -50,6 +57,9 @@ public class ppPaddle extends Thread {
 
     }
 
+    /**
+     * ppPaddle instance has a while loop that continuously calculate its position and velocity
+     */
     public void run() {
         while (true) {
             Vx = (X - lastX) / TICK;
@@ -62,10 +72,19 @@ public class ppPaddle extends Thread {
     public GPoint getV(){
         return new GPoint(Vx,Vy);
     }
+
+    /**
+     * Get ppPaddle current coordinates
+     * @return GPoint containing the current coordinates of the ppPaddle instance
+     */
     public GPoint getP() {
         return new GPoint(this.X, this.Y);
     }
 
+    /**
+     * Set the coordinate of the ppPaddle instance
+     * @param P Gpoint to set the ppPaddle instance to
+     */
     public void setP(GPoint P) { //P in world, center
         this.X = P.getX();
         this.Y = P.getY();
@@ -88,8 +107,12 @@ public class ppPaddle extends Thread {
      */
     public double getSgnVy(){
         if (Vy < 0) {
+            System.out.println("DOWN");
             return -1;
-        } else return 1;
+        } else {
+            System.out.println("UP");
+            return 1;
+        }
     }
 
     /***
@@ -101,8 +124,6 @@ public class ppPaddle extends Thread {
     public boolean contact(double Sx, double Sy){         //true when X+Xo >= myPaddle.X -2*bSize or not
         boolean Xcontact =  (Sx >= this.getP().getX() - ppPaddleW / 2 - bSize);
         boolean Ycontact = (Sy <= Y + ppPaddleH / 2) && (Sy >= Y - ppPaddleH / 2);
-        if ( Xcontact && Ycontact ) {
-            return true; // X is center of paddle so offset half width + half ball
-        }        else return false;
+        return Xcontact && Ycontact; // X is center of paddle so offset half width + half ball
     }
 }

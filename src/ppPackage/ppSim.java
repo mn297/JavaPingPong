@@ -13,7 +13,7 @@ import static ppPackage.ppSimParams.*;
 /**
  * Entry point for ball simulation program
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
  */
 public class ppSim extends GraphicsProgram {
     ppTable myTable;

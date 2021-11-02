@@ -3,7 +3,7 @@ package ppPackage;
 /**
  * Parameters for the whole program
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 1 handout, Assignment 2 handout)
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
  */
 public class ppSimParams {
     // 1. Paramters defined in screen coordinates (pixels, acm coordinates)
@@ -37,7 +37,7 @@ public class ppSimParams {
     public static final double Xinit = XwallL;      // Initial ball location (X)
     public static final double Yinit = Ymax / 2;      // Initial ball location (Y)
     public static final double PD = 1;              // Trace point diameter
-    public static final double TSCALE = 2000;       // Scaling parameter for pause() //default 2000
+    public static final double TSCALE = 4000;       // Scaling parameter for pause() //default 2000
 
     // 4. Paddle Parameters
     static final double ppPaddleH = 8 * 2.54 / 100; // Paddle height
@@ -45,7 +45,7 @@ public class ppSimParams {
     static final double ppPaddleXinit = XwallR - ppPaddleW / 2; // Initial Paddle X, center
     static final double ppPaddleYinit = Yinit;              // Initial Paddle Y
     static final double ppPaddleXgain = 2.0;        // Vx gain on paddle hit
-    static final double ppPaddleYgain = 1.5;        // Vy gain on paddle hit//
+    static final double ppPaddleYgain = 2.0;        // Vy gain on paddle hit default 1.5
     // 5. Parameters used by the ppSim class
     static final double YinitMAX = 0.75 * Ymax;       // Max inital height at 75% of range
     static final double YinitMIN = 0.25 * Ymax;       // Min inital height at 25% of range

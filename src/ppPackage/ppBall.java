@@ -120,7 +120,7 @@ public class ppBall extends Thread {
                 time = 0;
             }
 
-            //paddle collision handler TODO
+            //paddle collision handler
             if ((X + Xo) >= (RPaddle.getP().getX() - ppPaddleW / 2 - bSize) && Vx > 0) {
                 if (RPaddle.contact(Xo + X, Yo + Y) && Vx > 0) { //default XwallR - bSize
                     PE = bMass * g * (Y + Yo);
@@ -131,14 +131,12 @@ public class ppBall extends Thread {
                     Voy = Math.sqrt(2 * KEy / bMass);
 
 
-                    //debug
-                    System.out.printf("old %.2f \t %.2f \n", Vox, Voy);
 
                     Vox = Vox * ppPaddleXgain;
                     Voy = Voy * ppPaddleYgain * RPaddle.getSgnVy(); //maintain Vy direction
+//                    Voy = Voy * ppPaddleYgain * RPaddle.getV().getY(); //maintain Vy direction
 
-                    //debug
-                    System.out.printf("new %.2f \t %.2f \n", Vox, Voy);
+
 
                     //reset state
                     Xo = (RPaddle.getP().getX() - ppPaddleW / 2 - bSize);
@@ -155,7 +153,7 @@ public class ppBall extends Thread {
                     break;
 
                 }
-                ;
+
             }
             //left wall collision handler
             if (Vx < 0 && (X + Xo) <= (XwallL + bSize)) { //default: XwallL+bSize
