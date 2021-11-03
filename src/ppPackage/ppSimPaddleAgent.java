@@ -18,10 +18,12 @@ import static ppPackage.ppSimParams.*;
 public class ppSimPaddleAgent extends GraphicsProgram {
     ppTable myTable;
     ppPaddle rPaddle;
+    ppPaddleAgent lPaddle;
+
     ppBall myBall;
 
     public static void main(String[] args) {
-        new ppSim().start(args);
+        new ppSimPaddleAgent().start(args);
     }
 
     /**
@@ -46,7 +48,9 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         double iTheta = rgen.nextDouble(ThetaMIN, ThetaMAX);
 
 
-        rPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, Color.RED, myTable, this);
+        rPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, Color.GREEN, myTable, this);
+        lPaddle = new ppPaddleAgent(ppPaddleAgentXinit, ppPaddleAgentYinit, Color.RED, myTable, this);
+
 //        myPaddle.setP(new GPoint(ppPaddleXinit, ppPaddleYinit)); // fix paddle not appearing at start
         myBall = new ppBall(Xinit + bSize, iYinit, iVel, iTheta, iLoss, iColor, myTable, this);
         myBall.setRightPaddle(rPaddle);
@@ -55,6 +59,9 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         pause(STARTDELAY);
         myBall.start();
         rPaddle.start();
+        lPaddle.attachBall(myBall);
+        lPaddle.start();
+
 
 
     }

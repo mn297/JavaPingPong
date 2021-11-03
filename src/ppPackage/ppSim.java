@@ -2,6 +2,7 @@ package ppPackage;
 
 import acm.graphics.GOval;
 import acm.graphics.GPoint;
+import acm.gui.TableLayout;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
@@ -34,6 +35,9 @@ public class ppSim extends GraphicsProgram {
 
         //BUTTON
         JToggleButton toggleButton = new JToggleButton("Toggle Button");
+        setLayout(new TableLayout(2, 3));
+        add(toggleButton, SOUTH);
+
 
         myTable = new ppTable(this);
         RandomGenerator rgen = RandomGenerator.getInstance();
@@ -47,7 +51,7 @@ public class ppSim extends GraphicsProgram {
         double iTheta = rgen.nextDouble(ThetaMIN, ThetaMAX);
 
 
-        myPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, Color.RED, myTable, this);
+        myPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, Color.GREEN, myTable, this);
 //        myPaddle.setP(new GPoint(ppPaddleXinit, ppPaddleYinit)); // fix paddle not appearing at start
         myBall = new ppBall(Xinit + bSize, iYinit, iVel, iTheta, iLoss, iColor, myTable, this);
         myBall.setRightPaddle(myPaddle);
@@ -65,5 +69,12 @@ public class ppSim extends GraphicsProgram {
         double PaddleX = myPaddle.getP().getX();
         double PaddleY = Pm.getY();
         myPaddle.setP(new GPoint(PaddleX, PaddleY));
+    }
+    private void addButton(String name,
+                           GridBagLayout gridbag,
+                           GridBagConstraints c) {
+        Button button = new Button(name);
+        gridbag.setConstraints(button, c);
+        add(button);
     }
 }

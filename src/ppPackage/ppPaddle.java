@@ -52,7 +52,7 @@ public class ppPaddle extends Thread {
         this.myPaddle = new GRect(ScrX, ScrY, ppPaddleW * Xs, ppPaddleH * Ys);
 
         myPaddle.setFilled(true);
-        myPaddle.setColor(Color.BLACK);
+        myPaddle.setColor(myColor);
         this.GProgram.add(this.myPaddle);
 
     }

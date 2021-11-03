@@ -27,12 +27,11 @@ public class ppBall extends Thread {
     GOval myBall; // Graphics object representing ball
     ppPaddle RPaddle;
     ppPaddle LPaddle;
-    double X;
-    double Y;
+    double X, Xo;
+    double Y, Yo;
     double Vx;
     double Vy;
-    double Xo;
-    double Yo;
+
     boolean RUNNING = true;
 
     /**
@@ -112,9 +111,9 @@ public class ppBall extends Thread {
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
                 if (Vx < 0) {
-                    Vox = (-1) * Math.sqrt(2 * KEx / bMass);
+                    Vox = (-1) * Math.min(Math.sqrt(2 * KEx / bMass),VoMAX);
                 } else {
-                    Vox = Math.sqrt(2 * KEx / bMass);
+                    Vox = Math.min(Math.sqrt(2 * KEx / bMass),VoMAX);
                 }
 
 
@@ -135,7 +134,7 @@ public class ppBall extends Thread {
                     KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                     KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
 
-                    Vox = (-1) * Math.sqrt(2 * KEx / bMass);
+                    Vox = (-1) * Math.min(Math.sqrt(2 * KEx / bMass),VoMAX);
                     Voy = Math.sqrt(2 * KEy / bMass);
 
 
@@ -199,7 +198,7 @@ public class ppBall extends Thread {
             if ((KEx + KEy + PE) < ETHR) RUNNING = false;
             time += TICK;
 
-
+//            System.out.println(Vx);
         }
 
 

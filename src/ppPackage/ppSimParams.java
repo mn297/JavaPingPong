@@ -46,6 +46,9 @@ public class ppSimParams {
     static final double ppPaddleYinit = Yinit;              // Initial Paddle Y
     static final double ppPaddleXgain = 2.0;        // Vx gain on paddle hit
     static final double ppPaddleYgain = 1.6;        // Vy gain on paddle hit default 1.5
+    static final double ppPaddleAgentXinit = XwallL + ppPaddleW / 2; // Initial Paddle X, center
+    static final double ppPaddleAgentYinit = Yinit;              // Initial Paddle Y
+
     // 5. Parameters used by the ppSim class
     static final double YinitMAX = 0.75 * Ymax;       // Max inital height at 75% of range
     static final double YinitMIN = 0.25 * Ymax;       // Min inital height at 25% of range
