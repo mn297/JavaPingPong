@@ -26,6 +26,14 @@ public class ppBall extends Thread {
     ppTable myTable;
     GOval myBall; // Graphics object representing ball
     ppPaddle RPaddle;
+    ppPaddle LPaddle;
+    double X;
+    double Y;
+    double Vx;
+    double Vy;
+    double Xo;
+    double Yo;
+    boolean RUNNING = true;
 
     /**
      * The constructor for the ppBall class copies parameters to instance variables, creates an
@@ -72,8 +80,8 @@ public class ppBall extends Thread {
         double ScrX;
         double ScrY;
 
-        double Xo = Xinit;
-        double Yo = Yinit;
+        Xo = Xinit;
+        Yo = Yinit;
         double time = 0;
 
         double Vt = bMass * g / (4 * Pi * bSize * bSize * k);
@@ -88,14 +96,14 @@ public class ppBall extends Thread {
         double KEx = 0.5 * bMass * Math.pow(Vox * Math.exp(-g * time / Vt), 2);
         double KEy = 0.5 * bMass * Math.pow((Voy + Vt) * Math.exp(-g * time / Vt) - Vt, 2);
 
-        boolean RUNNING = true;
+
         while (RUNNING) {
 //
             //speed and displacement
-            double X = Vox * Vt / g * (1 - Math.exp(-g * time / Vt));
-            double Y = Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time;
-            double Vx = Vox * Math.exp(-g * time / Vt);
-            double Vy = (Voy + Vt) * Math.exp(-g * time / Vt) - Vt;
+            X = Vox * Vt / g * (1 - Math.exp(-g * time / Vt));
+            Y = Vt / g * (Voy + Vt) * (1 - Math.exp(-g * time / Vt)) - Vt * time;
+            Vx = Vox * Math.exp(-g * time / Vt);
+            Vy = (Voy + Vt) * Math.exp(-g * time / Vt) - Vt;
 
 
             //ground collision handler
@@ -131,11 +139,9 @@ public class ppBall extends Thread {
                     Voy = Math.sqrt(2 * KEy / bMass);
 
 
-
                     Vox = Vox * ppPaddleXgain;
                     Voy = Voy * ppPaddleYgain * RPaddle.getSgnVy(); //maintain Vy direction
 //                    Voy = Voy * ppPaddleYgain * RPaddle.getV().getY(); //maintain Vy direction
-
 
 
                     //reset state
@@ -226,6 +232,19 @@ public class ppBall extends Thread {
      */
     public void setRightPaddle(ppPaddle myPaddle) {
         this.RPaddle = myPaddle;
+    }
+
+    public void setLeftPaddle(ppPaddle myPaddle) {
+        this.LPaddle = myPaddle;
+    }
+    public GPoint getP(){
+        return new GPoint(X+Xo,Y+Yo);
+    }
+    public GPoint getV() {
+        return new GPoint(Vx, Vy);
+    }
+    public void kill(){
+        RUNNING = false;
     }
 
 }

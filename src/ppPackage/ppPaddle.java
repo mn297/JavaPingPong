@@ -32,7 +32,7 @@ public class ppPaddle extends Thread {
      * @param myTable ppTable instance from which to import W2S and S2W
      * @param GProgram the GraphicsProgram instance to add the ppPaddle to
      */
-    public ppPaddle(double X, double Y, ppTable myTable, GraphicsProgram GProgram) {
+    public ppPaddle(double X, double Y, Color myColor, ppTable myTable, GraphicsProgram GProgram) {
         this.X = X; //center of paddle
         this.Y = Y;
         this.Vx = 0;

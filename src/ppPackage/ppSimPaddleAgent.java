@@ -1,6 +1,5 @@
 package ppPackage;
 
-import acm.graphics.GOval;
 import acm.graphics.GPoint;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
@@ -16,9 +15,9 @@ import static ppPackage.ppSimParams.*;
  *
  * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
  */
-public class ppSim extends GraphicsProgram {
+public class ppSimPaddleAgent extends GraphicsProgram {
     ppTable myTable;
-    ppPaddle myPaddle;
+    ppPaddle rPaddle;
     ppBall myBall;
 
     public static void main(String[] args) {
@@ -47,23 +46,23 @@ public class ppSim extends GraphicsProgram {
         double iTheta = rgen.nextDouble(ThetaMIN, ThetaMAX);
 
 
-        myPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, Color.RED, myTable, this);
+        rPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, Color.RED, myTable, this);
 //        myPaddle.setP(new GPoint(ppPaddleXinit, ppPaddleYinit)); // fix paddle not appearing at start
         myBall = new ppBall(Xinit + bSize, iYinit, iVel, iTheta, iLoss, iColor, myTable, this);
-        myBall.setRightPaddle(myPaddle);
+        myBall.setRightPaddle(rPaddle);
         addMouseListeners();
 
         pause(STARTDELAY);
         myBall.start();
-        myPaddle.start();
+        rPaddle.start();
 
 
     }
 
     public void mouseMoved(MouseEvent e) {
         GPoint Pm = myTable.S2W(new GPoint(e.getX(), e.getY()));
-        double PaddleX = myPaddle.getP().getX();
+        double PaddleX = rPaddle.getP().getX();
         double PaddleY = Pm.getY();
-        myPaddle.setP(new GPoint(PaddleX, PaddleY));
+        rPaddle.setP(new GPoint(PaddleX, PaddleY));
     }
 }
