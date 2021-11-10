@@ -6,6 +6,7 @@ import acm.util.RandomGenerator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
 import static ppPackage.ppSimParams.*;
@@ -17,10 +18,11 @@ import static ppPackage.ppSimParams.*;
  */
 public class ppSimPaddleAgent extends GraphicsProgram {
     ppTable myTable;
-    ppPaddle rPaddle;
-    ppPaddleAgent lPaddle;
+    ppPaddle RPaddle;
+    ppPaddleAgent LPaddle;
 
     ppBall myBall;
+    RandomGenerator rgen;
 
     public static void main(String[] args) {
         new ppSimPaddleAgent().start(args);
@@ -30,46 +32,73 @@ public class ppSimPaddleAgent extends GraphicsProgram {
      * The run method for ppSim will create the walls using ppTable class and the balls by ppBall class.
      * It also reads user inputs for simulation parameters.
      */
-    public void run() {
+    public void init() {
         this.resize(ppSimParams.WIDTH + OFFSET, ppSimParams.HEIGHT + OFFSET);
-
         //BUTTON
-        JToggleButton toggleButton = new JToggleButton("Toggle Button");
+        traceButton = new JToggleButton("Trace");
+        JButton newServeButton = new JButton("New Serve");
+        JButton quitButton = new JButton("Quit");
 
-        myTable = new ppTable(this);
-        RandomGenerator rgen = RandomGenerator.getInstance();
+        add(newServeButton, SOUTH);
+        add(traceButton, SOUTH);
+        add(quitButton, SOUTH);
+        addMouseListeners();
+        addActionListeners();
+
+        rgen = RandomGenerator.getInstance();
         rgen.setSeed(RSEED);
 
+        myTable = new ppTable(this);
+        myBall = newBall();
+        newGame();
+    }
+
+    public void run() {
+
+    }
+
+    public void newGame() {
+        if (myBall != null) myBall.kill();// stop current game in play
+        myTable.newScreen();
+        myBall = newBall();
+
+        RPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, Color.GREEN, myTable, this);
+        LPaddle = new ppPaddleAgent(ppPaddleAgentXinit, ppPaddleAgentYinit, Color.RED, myTable, this);
+        LPaddle.attachBall(myBall); // to track ball position
+
+        myBall.setRightPaddle(RPaddle);
+        myBall.setLeftPaddle(LPaddle);
+        pause(STARTDELAY);
+
+        myBall.start();
+        LPaddle.start();
+        RPaddle.start();
+    }
+
+    public ppBall newBall() {
         // GENERATE PARAMETERS
         Color iColor = Color.RED;
         double iYinit = rgen.nextDouble(YinitMIN, YinitMAX);
         double iLoss = rgen.nextDouble(EMIN, EMAX);
         double iVel = rgen.nextDouble(VoMIN, VoMAX);
         double iTheta = rgen.nextDouble(ThetaMIN, ThetaMAX);
-
-
-        rPaddle = new ppPaddle(ppPaddleXinit, ppPaddleYinit, Color.GREEN, myTable, this);
-        lPaddle = new ppPaddleAgent(ppPaddleAgentXinit, ppPaddleAgentYinit, Color.RED, myTable, this);
-
-//        myPaddle.setP(new GPoint(ppPaddleXinit, ppPaddleYinit)); // fix paddle not appearing at start
-        myBall = new ppBall(Xinit + bSize, iYinit, iVel, iTheta, iLoss, iColor, myTable, this);
-        myBall.setRightPaddle(rPaddle);
-        addMouseListeners();
-
-        pause(STARTDELAY);
-        myBall.start();
-        rPaddle.start();
-        lPaddle.attachBall(myBall);
-        lPaddle.start();
-
-
-
+        ppBall myBall = new ppBall(Xinit + bSize, iYinit, iVel, iTheta, iLoss, iColor, myTable, this);
+        myBall.setRightPaddle(RPaddle);
+        myBall.setLeftPaddle(LPaddle);
+        return myBall;
     }
 
     public void mouseMoved(MouseEvent e) {
         GPoint Pm = myTable.S2W(new GPoint(e.getX(), e.getY()));
-        double PaddleX = rPaddle.getP().getX();
+        double PaddleX = RPaddle.getP().getX();
         double PaddleY = Pm.getY();
-        rPaddle.setP(new GPoint(PaddleX, PaddleY));
+        RPaddle.setP(new GPoint(PaddleX, PaddleY));
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        if (command.equals("New Serve")) {
+            newGame();
+        }
     }
 }

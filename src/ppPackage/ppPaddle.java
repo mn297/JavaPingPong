@@ -126,4 +126,9 @@ public class ppPaddle extends Thread {
         boolean Ycontact = (Sy <= Y + ppPaddleH / 2) && (Sy >= Y - ppPaddleH / 2);
         return Xcontact && Ycontact; // X is center of paddle so offset half width + half ball
     }
+    public boolean contactLeft(double Sx, double Sy){         //true when X+Xo >= myPaddle.X -2*bSize or not
+        boolean Xcontact =  (Sx <= this.getP().getX() + ppPaddleW / 2 + bSize);
+        boolean Ycontact = (Sy <= Y + ppPaddleH / 2) && (Sy >= Y - ppPaddleH / 2);
+        return Xcontact && Ycontact; // X is center of paddle so offset half width + half ball
+    }
 }

@@ -1,11 +1,17 @@
 package ppPackage;
 
+import javax.swing.*;
+
 /**
  * Parameters for the whole program
  *
  * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
  */
 public class ppSimParams {
+    //traceButton.isSelected()
+    public static JToggleButton traceButton;
+
+
     // 1. Paramters defined in screen coordinates (pixels, acm coordinates)
     public static final int WIDTH = 1280;   // n.b. screen coordinates default 1280x600
     public static final int HEIGHT = 600;

@@ -74,6 +74,11 @@ public class ppBall extends Thread {
      * myBall.start();
      * The body of the run method is essentially the simulator code you wrote for A1.
      */
+    /*
+    TODO ceilling collision
+    TODO LPaddle collision
+    TODO toggle trace
+     */
     public void run() {
         GPoint p;
         double ScrX;
@@ -111,9 +116,9 @@ public class ppBall extends Thread {
                 KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                 KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
                 if (Vx < 0) {
-                    Vox = (-1) * Math.min(Math.sqrt(2 * KEx / bMass),VoMAX);
+                    Vox = (-1) * Math.min(Math.sqrt(2 * KEx / bMass), VoMAX);
                 } else {
-                    Vox = Math.min(Math.sqrt(2 * KEx / bMass),VoMAX);
+                    Vox = Math.min(Math.sqrt(2 * KEx / bMass), VoMAX);
                 }
 
 
@@ -127,14 +132,14 @@ public class ppBall extends Thread {
                 time = 0;
             }
 
-            //paddle collision handler
+            //Rpaddle collision handler
             if ((X + Xo) >= (RPaddle.getP().getX() - ppPaddleW / 2 - bSize) && Vx > 0) {
                 if (RPaddle.contact(Xo + X, Yo + Y) && Vx > 0) { //default XwallR - bSize
                     PE = bMass * g * (Y + Yo);
                     KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                     KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
 
-                    Vox = (-1) * Math.min(Math.sqrt(2 * KEx / bMass),VoMAX);
+                    Vox = (-1) * Math.min(Math.sqrt(2 * KEx / bMass), VoMAX);
                     Voy = Math.sqrt(2 * KEy / bMass);
 
 
@@ -162,19 +167,21 @@ public class ppBall extends Thread {
             }
             //left wall collision handler
             if (Vx < 0 && (X + Xo) <= (XwallL + bSize)) { //default: XwallL+bSize
-                PE = bMass * g * (Y + Yo);
-                KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
-                KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
-                Vox = Math.abs(Math.sqrt(2 * KEx / bMass));
-                Voy = Math.sqrt(2 * KEy / bMass);
-                if (Vy < 0) Voy = -Voy; //maintain Vy direction
+                if (LPaddle.contactLeft(Xo + X, Yo + Y) && Vx < 0) {
+                    PE = bMass * g * (Y + Yo);
+                    KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
+                    KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
+                    Vox = Math.abs(Math.sqrt(2 * KEx / bMass));
+                    Voy = Math.sqrt(2 * KEy / bMass);
+                    if (Vy < 0) Voy = -Voy; //maintain Vy direction
 
-                //reset state
-                Xo = (XwallL + bSize); //default XwallL+bSize
-                Yo += Y;
-                X = 0;
-                Y = 0;
-                time = 0;
+                    //reset state
+                    Xo = (LPaddle.getP().getX() + ppPaddleW / 2 + bSize); //default XwallL+bSize
+                    Yo += Y;
+                    X = 0;
+                    Y = 0;
+                    time = 0;
+                }
             }
 
             if (MESG)
@@ -236,13 +243,16 @@ public class ppBall extends Thread {
     public void setLeftPaddle(ppPaddle myPaddle) {
         this.LPaddle = myPaddle;
     }
-    public GPoint getP(){
-        return new GPoint(X+Xo,Y+Yo);
+
+    public GPoint getP() {
+        return new GPoint(X + Xo, Y + Yo);
     }
+
     public GPoint getV() {
         return new GPoint(Vx, Vy);
     }
-    public void kill(){
+
+    public void kill() {
         RUNNING = false;
     }
 

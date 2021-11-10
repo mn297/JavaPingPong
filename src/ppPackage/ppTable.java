@@ -19,18 +19,18 @@ public class ppTable {
      *
      * @param GProgram the GraphicsProgram in which to draw the walls
      */
+    GraphicsProgram GProgram;
     public ppTable(GraphicsProgram GProgram) {
         //plane
-        GRect gPlane = new GRect(0, HEIGHT, WIDTH, 0);
-        gPlane.setColor(Color.BLACK);
-        gPlane.setFilled(true);
-        GProgram.add(gPlane);
+        this.GProgram = GProgram;
+        addGroundPlane();
+
 
         //left wall
-        GRect leftWall = new GRect(XwallL * Xs, 0, 0, HEIGHT);//p1 = 0
-        leftWall.setColor(Color.BLUE);
-        leftWall.setFilled(true);
-        GProgram.add(leftWall);
+//        GRect leftWall = new GRect(XwallL * Xs, 0, 0, HEIGHT);//p1 = 0
+//        leftWall.setColor(Color.BLUE);
+//        leftWall.setFilled(true);
+//        GProgram.add(leftWall);
 
         //right wall
 //        GRect rightWall = new GRect(XwallR * Xs, 0, 0, HEIGHT);
@@ -60,5 +60,15 @@ public class ppTable {
 
         return new GPoint(X_w, Y_w);
 
+    }
+    public void newScreen(){
+        GProgram.removeAll();
+        addGroundPlane();
+    }
+    public void addGroundPlane(){
+        GRect gPlane = new GRect(0, HEIGHT, WIDTH, 0);
+        gPlane.setColor(Color.BLACK);
+        gPlane.setFilled(true);
+        GProgram.add(gPlane);
     }
 }
