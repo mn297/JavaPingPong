@@ -11,7 +11,7 @@ import static ppPackage.ppSimParams.*;
 /**
  * Wrapper for a GOval instance and handles physics simulation
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 4 handout), Katrina Poulin's tutorial
  */
 public class ppBall extends Thread {
 
@@ -32,7 +32,6 @@ public class ppBall extends Thread {
     double Vx;
     double Vy;
 
-    boolean RUNNING = true;
 
     /**
      * The constructor for the ppBall class copies parameters to instance variables, creates an
@@ -72,9 +71,6 @@ public class ppBall extends Thread {
      * ppBall myBall = new ppBall (--parameters--);
      * myBall.start();
      * The body of the run method is essentially the simulator code you wrote for A1.
-     */
-    /*
-    TODO ceilling collision
      */
     public void run() {
         GPoint p;
@@ -205,11 +201,13 @@ public class ppBall extends Thread {
                     time = 0;
 
                 } else {
-                    p = W2S(new GPoint(LPaddle.getP().getX(), Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
+                    p = W2S(new GPoint(LPaddle.getP().getX() - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
                     ScrX = p.getX();
                     ScrY = p.getY();
                     myBall.setLocation(p);
                     trace(ScrX, ScrY);
+
+                    System.out.println(W2S(new GPoint(0.056350000000000004, 0)).getX());
                     playerScore++;
                     ppSimPaddleAgent.updateText(scoreBoard);
                     System.out.println("left hit");
@@ -227,7 +225,7 @@ public class ppBall extends Thread {
                         Vy
                 );
 
-            GProgram.pause(TICK * TSCALE);
+            GProgram.pause(TICK * 10000 / speedFactor);
 
 
             p = W2S(new GPoint(Xo + X - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
@@ -275,19 +273,30 @@ public class ppBall extends Thread {
     public void setRightPaddle(ppPaddle myPaddle) {
         this.RPaddle = myPaddle;
     }
-
+    /***
+     * Setter for LPaddle instance variable
+     * @param myPaddle a ppPaddle instance
+     */
     public void setLeftPaddle(ppPaddle myPaddle) {
         this.LPaddle = myPaddle;
     }
-
+    /**
+     * Get ppBall current coordinates
+     * @return GPoint containing the current coordinates of the ppBall instance
+     */
     public GPoint getP() {
         return new GPoint(X + Xo, Y + Yo);
     }
-
+    /**
+     * Get ppBall current velocity
+     * @return GPoint containing the velocity of the ppBall in both axis
+     */
     public GPoint getV() {
         return new GPoint(Vx, Vy);
     }
-
+    /***
+     * Stop the ppBall instance while loop
+     */
     public void kill() {
         RUNNING = false;
     }

@@ -5,14 +5,15 @@ import javax.swing.*;
 /**
  * Parameters for the whole program
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 4 handout), Katrina Poulin's tutorial
  */
 public class ppSimParams {
     //traceButton.isSelected()
     public static JToggleButton traceButton;
     public static int playerScore;
     public static int agentScore;
-   public static JLabel scoreBoard;
+    public static JLabel scoreBoard;
+    public static boolean RUNNING = true;
 
     // 1. Paramters defined in screen coordinates (pixels, acm coordinates)
     public static final int WIDTH = 1280;   // n.b. screen coordinates default 1280x600
@@ -30,7 +31,7 @@ public class ppSimParams {
     public static final double Pi = 3.1416;
     public static final double bSize = 0.02;        // pp ball radius
     public static final double bMass = 0.0027;      // pp ball mass
-    public static final double TICK = 0.01;         // Clock tick duration (sec)
+    public static final double TICK = 0.001;         // Clock tick duration (sec)
     public static final double ETHR = 0.001;   // Minimum ball energy
     public static final double Xmin = 0.0;          // Minimum value of X (pp table)
     public static final double Xmax = ppTableXlen;  // Maximum value of X
@@ -45,7 +46,12 @@ public class ppSimParams {
     public static final double Xinit = XwallL;      // Initial ball location (X)
     public static final double Yinit = Ymax / 2;      // Initial ball location (Y)
     public static final double PD = 1;              // Trace point diameter
-    public static final double TSCALE = 4000;       // Scaling parameter for pause() //default 2000
+
+
+    public static int speedFactor = 3;
+    public static volatile double TSCALE = 10000 / speedFactor;       // Scaling parameter for pause() //default 2000
+    public static int agentLag  = 40;
+
 
     // 4. Paddle Parameters
     static final double ppPaddleH = 8 * 2.54 / 100; // Paddle height

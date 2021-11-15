@@ -11,7 +11,7 @@ import static ppPackage.ppSimParams.*;
 /**
  * Walls for ball physics simulation
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 4 handout), Katrina Poulin's tutorial
  */
 public class ppTable {
     /**

@@ -12,7 +12,7 @@ import static ppPackage.ppSimParams.*;
 /**
  * Wrapper class for the paddle in game
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 4 handout), Katrina Poulin's tutorial
  */
 public class ppPaddle extends Thread {
     double X;
@@ -69,6 +69,10 @@ public class ppPaddle extends Thread {
             GProgram.pause(TICK*TSCALE);
         }
     }
+    /**
+     * Get ppPaddle current velocity
+     * @return GPoint containing the velocity of the ppPaddle instance in both axis
+     */
     public GPoint getV(){
         return new GPoint(Vx,Vy);
     }
@@ -116,7 +120,7 @@ public class ppPaddle extends Thread {
     }
 
     /***
-     * check whether a point is in contact with the current ppPaddle instance
+     * check whether a point is in contact with a right side ppPaddle instance
      * @param Sx x in world coordinates
      * @param Sy y in world coordinates
      * @return true if in contact, false otherwise
@@ -126,6 +130,13 @@ public class ppPaddle extends Thread {
         boolean Ycontact = (Sy <= Y + ppPaddleH / 2) && (Sy >= Y - ppPaddleH / 2);
         return Xcontact && Ycontact; // X is center of paddle so offset half width + half ball
     }
+
+    /***
+     * check whether a point is in contact with a left side ppPaddle instance
+     * @param Sx x in world coordinates
+     * @param Sy y in world coordinates
+     * @return true if in contact, false otherwise
+     */
     public boolean contactLeft(double Sx, double Sy){         //true when X+Xo >= myPaddle.X -2*bSize or not
         boolean Xcontact =  (Sx <= this.getP().getX() + ppPaddleW / 2 + bSize);
         boolean Ycontact = (Sy <= Y + ppPaddleH / 2) && (Sy >= Y - ppPaddleH / 2);

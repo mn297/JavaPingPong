@@ -5,6 +5,8 @@ import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -14,7 +16,7 @@ import static ppPackage.ppSimParams.*;
 /**
  * Entry point for ball simulation program
  *
- * @author Martin Nguyen, Professor Frank Ferrie (Assignment 3 handout), Katrina Poulin's tutorial
+ * @author Martin Nguyen, Professor Frank Ferrie (Assignment 4 handout), Katrina Poulin's tutorial
  */
 public class ppSimPaddleAgent extends GraphicsProgram {
     ppTable myTable;
@@ -23,7 +25,6 @@ public class ppSimPaddleAgent extends GraphicsProgram {
 
     ppBall myBall;
     RandomGenerator rgen;
-
 
 
     public static void main(String[] args) {
@@ -41,16 +42,37 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         JButton newServeButton = new JButton("New Serve");
         JButton quitButton = new JButton("Quit");
 
+
         //SCOREBOARD
-        scoreBoard = new JLabel("player: " + playerScore + " | agent: "+ agentScore);
+        scoreBoard = new JLabel("player: " + playerScore + " | agent: " + agentScore);
+
+        //slider
+        JSlider lagSlider = new JSlider(JSlider.HORIZONTAL,
+                0, 100, agentLag);
+        JSlider timeSlider = new JSlider(JSlider.HORIZONTAL,
+                1, 60, speedFactor*10);
 
 
         add(newServeButton, SOUTH);
         add(traceButton, SOUTH);
         add(quitButton, SOUTH);
+
+        add(new JLabel("\t-t"), SOUTH);
+        add(timeSlider, SOUTH);
+        add(new JLabel("+t\t"), SOUTH);
+
+        add(new JLabel("\t-lag"), SOUTH);
+        add(lagSlider, SOUTH);
+        add(new JLabel("+lag\t"), SOUTH);
+
+
         add(scoreBoard, NORTH);
+
         addMouseListeners();
         addActionListeners();
+
+        lagSlider.addChangeListener(new lagSliderListener());
+        timeSlider.addChangeListener(new timeSliderListener());
 
         rgen = RandomGenerator.getInstance();
         rgen.setSeed(RSEED);
@@ -92,7 +114,7 @@ public class ppSimPaddleAgent extends GraphicsProgram {
     }
 
     public void mouseMoved(MouseEvent e) {
-        if(myTable == null || RPaddle == null) return;
+        if (myTable == null || RPaddle == null) return;
         GPoint Pm = myTable.S2W(new GPoint(e.getX(), e.getY()));
         double PaddleX = RPaddle.getP().getX();
         double PaddleY = Pm.getY();
@@ -107,7 +129,31 @@ public class ppSimPaddleAgent extends GraphicsProgram {
             System.exit(0);
         }
     }
-    public static void updateText(JLabel scoreboard){
-        scoreboard.setText("player: " + playerScore + " | agent: "+ agentScore);;
+
+    public static void updateText(JLabel scoreboard) {
+        scoreboard.setText("player: " + playerScore + " | agent: " + agentScore);
+        ;
+    }
+
+    class lagSliderListener implements ChangeListener {
+        public void stateChanged(ChangeEvent e) {
+            JSlider source = (JSlider) e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                int newAgentLag = source.getValue();
+                println("agentLag changed to " + newAgentLag);
+                agentLag = newAgentLag;
+            }
+        }
+    }
+
+    class timeSliderListener implements ChangeListener {
+        public void stateChanged(ChangeEvent e) {
+            JSlider source = (JSlider) e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                int newFactor = source.getValue() / 10;
+                println("speedFactor changed to " + newFactor);
+                speedFactor = newFactor;
+            }
+        }
     }
 }
