@@ -10,7 +10,9 @@ import javax.swing.*;
 public class ppSimParams {
     //traceButton.isSelected()
     public static JToggleButton traceButton;
-
+    public static int playerScore;
+    public static int agentScore;
+   public static JLabel scoreBoard;
 
     // 1. Paramters defined in screen coordinates (pixels, acm coordinates)
     public static final int WIDTH = 1280;   // n.b. screen coordinates default 1280x600

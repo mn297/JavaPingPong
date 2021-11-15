@@ -64,7 +64,6 @@ public class ppBall extends Thread {
         myBall.setColor(color);
         myBall.setFilled(true);
         GProgram.add(myBall);
-
     }
 
     /**
@@ -76,8 +75,6 @@ public class ppBall extends Thread {
      */
     /*
     TODO ceilling collision
-    TODO LPaddle collision
-    TODO toggle trace
      */
     public void run() {
         GPoint p;
@@ -121,12 +118,29 @@ public class ppBall extends Thread {
                     Vox = Math.min(Math.sqrt(2 * KEx / bMass), VoMAX);
                 }
 
-
                 Voy = Math.sqrt(2 * KEy / bMass);
 
                 //reset state
                 Xo += X;
                 Yo = bSize; //??why not Yo+=Y, bSize because offset from ground to midball
+                X = 0; //??why need to be 0? its recalculated everytime
+                Y = 0;
+                time = 0;
+            }
+            //Ceilling collision
+            if (Vy > 0 && Y + Yo >= Ymax - bSize) {
+                PE = 0; //no potential energy on ground default 0
+                KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
+                KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
+                if (Vx < 0) {
+                    Vox = (-1) * Math.min(Math.sqrt(2 * KEx / bMass), VoMAX);
+                } else {
+                    Vox = Math.min(Math.sqrt(2 * KEx / bMass), VoMAX);
+                }
+                Voy = (-1) *Math.sqrt(2 * KEy / bMass);
+                //reset state
+                Xo += X;
+                Yo = Ymax - bSize; //??why not Yo+=Y, bSize because offset from ground to midball
                 X = 0; //??why need to be 0? its recalculated everytime
                 Y = 0;
                 time = 0;
@@ -154,12 +168,16 @@ public class ppBall extends Thread {
                     X = 0;
                     Y = 0;
                     time = 0;
+
                 } else { // make ball appear at center X of paddle when program stops
                     p = W2S(new GPoint(RPaddle.getP().getX() - bSize, Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
                     ScrX = p.getX();
                     ScrY = p.getY();
                     myBall.setLocation(p);
                     trace(ScrX, ScrY);
+
+                    agentScore++;
+                    ppSimPaddleAgent.updateText(scoreBoard);
                     break;
 
                 }
@@ -171,9 +189,13 @@ public class ppBall extends Thread {
                     PE = bMass * g * (Y + Yo);
                     KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                     KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
-                    Vox = Math.abs(Math.sqrt(2 * KEx / bMass));
+                    Vox = Math.min(Math.sqrt(2 * KEx / bMass), VoMAX);
                     Voy = Math.sqrt(2 * KEy / bMass);
-                    if (Vy < 0) Voy = -Voy; //maintain Vy direction
+
+
+                    Vox = Vox * ppPaddleXgain;
+                    Voy = Voy * ppPaddleYgain * RPaddle.getSgnVy(); //maintain Vy direction
+//                    Voy = Voy * ppPaddleYgain * RPaddle.getV().getY(); //maintain Vy direction
 
                     //reset state
                     Xo = (LPaddle.getP().getX() + ppPaddleW / 2 + bSize); //default XwallL+bSize
@@ -181,6 +203,18 @@ public class ppBall extends Thread {
                     X = 0;
                     Y = 0;
                     time = 0;
+
+                } else {
+                    p = W2S(new GPoint(LPaddle.getP().getX(), Yo + Y + bSize)); //??offset; default:Xo + X - bSize, Yo + Y + bSize
+                    ScrX = p.getX();
+                    ScrY = p.getY();
+                    myBall.setLocation(p);
+                    trace(ScrX, ScrY);
+                    playerScore++;
+                    ppSimPaddleAgent.updateText(scoreBoard);
+                    System.out.println("left hit");
+                    break;
+
                 }
             }
 
@@ -226,10 +260,12 @@ public class ppBall extends Thread {
      * @param ScrY vertical screen coordinate
      */
     private void trace(double ScrX, double ScrY) {
-        GOval pt = new GOval(ScrX + bSize * Xs, ScrY + bSize * Ys, PD, PD);
-        pt.setColor(Color.BLACK);
-        pt.setFilled(true);
-        GProgram.add(pt);
+        if (traceButton.isSelected()) {
+            GOval pt = new GOval(ScrX + bSize * Xs, ScrY + bSize * Ys, PD, PD);
+            pt.setColor(Color.BLACK);
+            pt.setFilled(true);
+            GProgram.add(pt);
+        }
     }
 
     /***

@@ -24,6 +24,8 @@ public class ppSimPaddleAgent extends GraphicsProgram {
     ppBall myBall;
     RandomGenerator rgen;
 
+
+
     public static void main(String[] args) {
         new ppSimPaddleAgent().start(args);
     }
@@ -32,16 +34,21 @@ public class ppSimPaddleAgent extends GraphicsProgram {
      * The run method for ppSim will create the walls using ppTable class and the balls by ppBall class.
      * It also reads user inputs for simulation parameters.
      */
-    public void init() {
+    public void run() {
         this.resize(ppSimParams.WIDTH + OFFSET, ppSimParams.HEIGHT + OFFSET);
         //BUTTON
         traceButton = new JToggleButton("Trace");
         JButton newServeButton = new JButton("New Serve");
         JButton quitButton = new JButton("Quit");
 
+        //SCOREBOARD
+        scoreBoard = new JLabel("player: " + playerScore + " | agent: "+ agentScore);
+
+
         add(newServeButton, SOUTH);
         add(traceButton, SOUTH);
         add(quitButton, SOUTH);
+        add(scoreBoard, NORTH);
         addMouseListeners();
         addActionListeners();
 
@@ -49,13 +56,9 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         rgen.setSeed(RSEED);
 
         myTable = new ppTable(this);
-        myBall = newBall();
         newGame();
     }
 
-    public void run() {
-
-    }
 
     public void newGame() {
         if (myBall != null) myBall.kill();// stop current game in play
@@ -89,6 +92,7 @@ public class ppSimPaddleAgent extends GraphicsProgram {
     }
 
     public void mouseMoved(MouseEvent e) {
+        if(myTable == null || RPaddle == null) return;
         GPoint Pm = myTable.S2W(new GPoint(e.getX(), e.getY()));
         double PaddleX = RPaddle.getP().getX();
         double PaddleY = Pm.getY();
@@ -99,6 +103,11 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         String command = e.getActionCommand();
         if (command.equals("New Serve")) {
             newGame();
+        } else if (command.equals("Quit")) {
+            System.exit(0);
         }
+    }
+    public static void updateText(JLabel scoreboard){
+        scoreboard.setText("player: " + playerScore + " | agent: "+ agentScore);;
     }
 }

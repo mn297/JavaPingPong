@@ -22,14 +22,22 @@ public class ppPaddleAgent extends ppPaddle{
     }
     public void run() {
             int ballSkip = 0;
-            int AgentLag = 5;
+            int AgentLag = 500000000;
         while(true){
             if (ballSkip++ >= AgentLag){
+                System.out.println(ballSkip);
                 ballSkip=0;
+                try {
+                    sleep(600);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                double PaddleAgentX = this.getP().getX();
+                double PaddleAgentY = myBall.getP().getY();
+                this.setP(new GPoint(PaddleAgentX, PaddleAgentY));
+
             }
-            double PaddleAgentX = this.getP().getX();
-            double PaddleAgentY = myBall.getP().getY();
-            this.setP(new GPoint(PaddleAgentX, PaddleAgentY));
+
 
         }
     }
