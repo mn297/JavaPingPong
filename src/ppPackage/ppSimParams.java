@@ -8,12 +8,12 @@ import javax.swing.*;
  * @author Martin Nguyen, Professor Frank Ferrie (Assignment 4 handout), Katrina Poulin's tutorial
  */
 public class ppSimParams {
-    //traceButton.isSelected()
+    //GUI
     public static JToggleButton traceButton;
     public static int playerScore;
     public static int agentScore;
     public static JLabel scoreBoard;
-    public static boolean RUNNING = true;
+    public static boolean GODMODE = false;
 
     // 1. Paramters defined in screen coordinates (pixels, acm coordinates)
     public static final int WIDTH = 1280;   // n.b. screen coordinates default 1280x600
@@ -31,7 +31,7 @@ public class ppSimParams {
     public static final double Pi = 3.1416;
     public static final double bSize = 0.02;        // pp ball radius
     public static final double bMass = 0.0027;      // pp ball mass
-    public static final double TICK = 0.001;         // Clock tick duration (sec)
+    public static final double TICK = 0.01;         // Clock tick duration (sec)
     public static final double ETHR = 0.001;   // Minimum ball energy
     public static final double Xmin = 0.0;          // Minimum value of X (pp table)
     public static final double Xmax = ppTableXlen;  // Maximum value of X

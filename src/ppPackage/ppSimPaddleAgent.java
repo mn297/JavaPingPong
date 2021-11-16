@@ -26,7 +26,9 @@ public class ppSimPaddleAgent extends GraphicsProgram {
     ppBall myBall;
     RandomGenerator rgen;
 
-
+    /**
+     * Entry point to fix 64-bit compatibility issue
+     */
     public static void main(String[] args) {
         new ppSimPaddleAgent().start(args);
     }
@@ -41,21 +43,22 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         traceButton = new JToggleButton("Trace");
         JButton newServeButton = new JButton("New Serve");
         JButton quitButton = new JButton("Quit");
-
+        JButton clearButton = new JButton("Clear");
 
         //SCOREBOARD
-        scoreBoard = new JLabel("player: " + playerScore + " | agent: " + agentScore);
+        scoreBoard = new JLabel("PLAYER: " + playerScore + " | AGENT: " + agentScore);
 
         //slider
         JSlider lagSlider = new JSlider(JSlider.HORIZONTAL,
-                0, 100, agentLag);
+                0, 70, agentLag);
         JSlider timeSlider = new JSlider(JSlider.HORIZONTAL,
-                1, 60, speedFactor*10);
+                1, 70, speedFactor*10);
 
 
         add(newServeButton, SOUTH);
         add(traceButton, SOUTH);
         add(quitButton, SOUTH);
+        add(clearButton, SOUTH);
 
         add(new JLabel("\t-t"), SOUTH);
         add(timeSlider, SOUTH);
@@ -100,6 +103,10 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         RPaddle.start();
     }
 
+    /**
+     *
+     * @return a new ppBall instance with random values
+     */
     public ppBall newBall() {
         // GENERATE PARAMETERS
         Color iColor = Color.RED;
@@ -113,6 +120,10 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         return myBall;
     }
 
+    /**
+     * Moves the RPaddle with accordingly with mouse movement
+     * @param e Mouse event
+     */
     public void mouseMoved(MouseEvent e) {
         if (myTable == null || RPaddle == null) return;
         GPoint Pm = myTable.S2W(new GPoint(e.getX(), e.getY()));
@@ -121,20 +132,34 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         RPaddle.setP(new GPoint(PaddleX, PaddleY));
     }
 
+    /**
+     * Action listeners for buttons
+     * @param e Action event
+     */
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         if (command.equals("New Serve")) {
             newGame();
         } else if (command.equals("Quit")) {
             System.exit(0);
+        }else if (command.equals("Clear")) {
+            playerScore = 0;
+            agentScore = 0;
+            updateText(scoreBoard);
         }
     }
 
+    /**
+     * Update JLabel scoreBoard with new score values
+     * @param scoreboard JLabel instance that stores the score
+     */
     public static void updateText(JLabel scoreboard) {
-        scoreboard.setText("player: " + playerScore + " | agent: " + agentScore);
-        ;
+        scoreboard.setText("PLAYER: " + playerScore + " | AGENT: " + agentScore);
     }
 
+    /**
+     * Listener for lag slider
+     */
     class lagSliderListener implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
@@ -146,6 +171,9 @@ public class ppSimPaddleAgent extends GraphicsProgram {
         }
     }
 
+    /**
+     * Listener for time slider
+     */
     class timeSliderListener implements ChangeListener {
         public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();

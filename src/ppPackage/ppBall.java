@@ -31,7 +31,7 @@ public class ppBall extends Thread {
     double Y, Yo;
     double Vx;
     double Vy;
-
+    boolean RUNNING = true;
 
     /**
      * The constructor for the ppBall class copies parameters to instance variables, creates an
@@ -144,7 +144,8 @@ public class ppBall extends Thread {
 
             //Rpaddle collision handler
             if ((X + Xo) >= (RPaddle.getP().getX() - ppPaddleW / 2 - bSize) && Vx > 0) {
-                if (RPaddle.contact(Xo + X, Yo + Y) && Vx > 0) { //default XwallR - bSize
+                if (RPaddle.contact(Xo + X, Yo + Y) && Vx > 0 || ppSimParams.GODMODE) { //default XwallR - bSize
+
                     PE = bMass * g * (Y + Yo);
                     KEx = 0.5 * bMass * Vx * Vx * (1 - loss);
                     KEy = 0.5 * bMass * Vy * Vy * (1 - loss);
